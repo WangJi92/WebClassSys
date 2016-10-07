@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.hdu.edu</groupId>
-    <artifactId>hdu.classrom.system</artifactId>
+    <artifactId>Weather</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>webSystem</name>
@@ -487,7 +487,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>ClassRoom</finalName>
+        <finalName>Weather</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
