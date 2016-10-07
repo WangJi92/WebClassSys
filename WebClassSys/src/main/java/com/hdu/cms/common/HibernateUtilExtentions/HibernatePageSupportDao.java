@@ -1,5 +1,6 @@
 package com.hdu.cms.common.HibernateUtilExtentions;
 
+import com.hdu.cms.common.Utils.LogUtils;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -65,35 +66,36 @@ public class HibernatePageSupportDao extends HibernateGenericDao {
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public PageBean findPageByCriteria(final DetachedCriteria detachedCriteria, final int pageNo, final int pageSize){
-		return (PageBean) getHibernateTemplate().execute(new HibernateCallback(){
-			public Object doInHibernate(Session session) throws HibernateException{
+		return (PageBean) getHibernateTemplate().executeWithNativeSession(new HibernateCallback() {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Criteria criteria = detachedCriteria.getExecutableCriteria(session);
-				
+
+
 				//先去掉Order部分
 				List orderEntrys = null;
 				Field field = null;
 				CriteriaImpl impl = (CriteriaImpl) criteria;
 				try {
-	                field = CriteriaImpl.class.getDeclaredField("orderEntries");
-	                field.setAccessible(true);
-	                orderEntrys = (List)field.get(impl);
-	                field.set(criteria, new ArrayList());
-                } catch (SecurityException e) {
-                } catch (IllegalArgumentException e) {
-                } catch (NoSuchFieldException e) {
-                } catch (IllegalAccessException e) {
-                }
-				
+					field = CriteriaImpl.class.getDeclaredField("orderEntries");
+					field.setAccessible(true);
+					orderEntrys = (List) field.get(impl);
+					field.set(criteria, new ArrayList());
+				} catch (SecurityException e) {
+				} catch (IllegalArgumentException e) {
+				} catch (NoSuchFieldException e) {
+				} catch (IllegalAccessException e) {
+				}
+
 				//获取总记录数
-				int totalCount=0;
-                try {
-	                totalCount = ((Number) criteria.setProjection(Projections.rowCount())
-	                		.uniqueResult()).intValue();
-                } catch (Exception e1) {
-	                // TODO Auto-generated catch block
-	                e1.printStackTrace();
-                }
-				
+				int totalCount = 0;
+				try {
+					totalCount = ((Number) criteria.setProjection(Projections.rowCount())
+							.uniqueResult()).intValue();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
 				//TODO totalCount和items换位置后这部分是不是可以不要了
 				
 				/*
@@ -102,31 +104,31 @@ public class HibernatePageSupportDao extends HibernateGenericDao {
 				 */
 				criteria.setProjection(null);
 				criteria.setResultTransformer(CriteriaSpecification.ROOT_ENTITY);//不希望返回数组，返回根对象
-				
+
 				//再恢复Order部分
 				try {
-	                List innerOrderEntries = (List)field.get(criteria);
-	                for(int i = 0; i < orderEntrys.size(); i++){
-	                	innerOrderEntries.add(orderEntrys.get(i));
-	                }
-	                field.set(criteria, innerOrderEntries);
-                } catch (IllegalArgumentException e) {
-                } catch (IllegalAccessException e) {
-                }
-        		// 返回分页对象
-        		if (totalCount < 1)
-        			return new PageBean(0, 0, pageSize, new ArrayList());
+					List innerOrderEntries = (List) field.get(criteria);
+					for (int i = 0; i < orderEntrys.size(); i++) {
+						innerOrderEntries.add(orderEntrys.get(i));
+					}
+					field.set(criteria, innerOrderEntries);
+				} catch (IllegalArgumentException e) {
+				} catch (IllegalAccessException e) {
+				}
+				// 返回分页对象
+				if (totalCount < 1)
+					return new PageBean(0, 0, pageSize, new ArrayList());
 
-        		int tempPageNo = pageNo;
-        		int offset = PageBean.countOffset(pageSize, tempPageNo);
-        		if(offset >= totalCount){
-        			tempPageNo = (totalCount+pageSize-1)/pageSize;
-        			offset = (tempPageNo-1) * pageSize;
-        		}
-              //获取结果集
+				int tempPageNo = pageNo;
+				int offset = PageBean.countOffset(pageSize, tempPageNo);
+				if (offset >= totalCount) {
+					tempPageNo = (totalCount + pageSize - 1) / pageSize;
+					offset = (tempPageNo - 1) * pageSize;
+				}
+				//获取结果集
 				List items = criteria.setFirstResult(offset).setMaxResults(pageSize).list();
-                PageBean ps = new PageBean(totalCount, tempPageNo, pageSize, items);
-                
+				PageBean ps = new PageBean(totalCount, tempPageNo, pageSize, items);
+
 				return ps;
 			}
 		});
@@ -134,7 +136,7 @@ public class HibernatePageSupportDao extends HibernateGenericDao {
     @SuppressWarnings("rawtypes")
     public int findCountByCriteria(final DetachedCriteria detachedCriteria){
     	@SuppressWarnings("unchecked")
-		Integer count = (Integer) getHibernateTemplate().execute(new HibernateCallback(){
+		Integer count = (Integer) getHibernateTemplate().executeWithNativeSession(new HibernateCallback(){
             public Object doInHibernate(Session session) throws HibernateException{
     			Criteria criteria = detachedCriteria.getExecutableCriteria(session);
     			//去掉Order部分
