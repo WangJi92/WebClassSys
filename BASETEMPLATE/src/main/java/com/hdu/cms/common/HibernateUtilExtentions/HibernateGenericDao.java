@@ -149,7 +149,7 @@ public class HibernateGenericDao extends HibernateDaoSupport {
 	}
 	@SuppressWarnings({"unchecked", "rawtypes"})
     public void executeUpdateSQL(final String sql){
-		getHibernateTemplate().execute(new HibernateCallback(){
+		getHibernateTemplate().executeWithNativeSession(new HibernateCallback(){
 			public Object doInHibernate(Session session)
 					throws HibernateException {
 				if (sql == null || sql.trim().length()==0) {
@@ -167,7 +167,7 @@ public class HibernateGenericDao extends HibernateDaoSupport {
 	
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void executeUpdateHql(final String hql){
-		getHibernateTemplate().execute(new HibernateCallback() {
+		getHibernateTemplate().executeWithNativeSession(new HibernateCallback() {
 			public Object doInHibernate(Session session)
 					throws HibernateException {
 				if (hql == null || hql.trim().length()==0) {

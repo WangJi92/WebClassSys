@@ -225,7 +225,7 @@ public class HibernateEntityDao<T> extends HibernatePageSupportDao {
 	 * @date 2016年5月21日-下午2:48:06
 	 */
 	public void deleteAll(final String propertyName, final String propertyValue) {
-		getHibernateTemplate().execute(new HibernateCallback<T>() {
+		getHibernateTemplate().executeWithNativeSession(new HibernateCallback<T>() {
 			@Override
 			public T doInHibernate(Session session) throws HibernateException {
 				StringBuffer hql = new StringBuffer(50);
@@ -243,7 +243,7 @@ public class HibernateEntityDao<T> extends HibernatePageSupportDao {
 		});
 	}
 	public void deleteAll(final String propertyName, final String propertyValue, final Class cls) {
-		getHibernateTemplate().execute(new HibernateCallback<T>() {
+		getHibernateTemplate().executeWithNativeSession(new HibernateCallback<T>() {
 			@Override
 			public T doInHibernate(Session session) throws HibernateException {
 				StringBuffer hql = new StringBuffer(50);
@@ -271,7 +271,7 @@ public class HibernateEntityDao<T> extends HibernatePageSupportDao {
 		if (propertyNames.size() != propertyValues.size()) {
 			throw new ArrayStoreException("数组长度不匹配");
 		}
-		getHibernateTemplate().execute(new HibernateCallback<T>() {
+		getHibernateTemplate().executeWithNativeSession(new HibernateCallback<T>() {
 			@Override
 			public T doInHibernate(Session session) throws HibernateException {
 				StringBuffer hql = new StringBuffer(50);
@@ -305,7 +305,7 @@ public class HibernateEntityDao<T> extends HibernatePageSupportDao {
     * @date 2016年5月21日-下午2:53:31
     */
 	public void deleteAllByDate(final String property, final Date date) {
-		super.getHibernateTemplate().execute(new HibernateCallback<T>() {
+		super.getHibernateTemplate().executeWithNativeSession(new HibernateCallback<T>() {
 			@Override
 			public T doInHibernate(Session session) throws HibernateException {
 				StringBuffer hql = new StringBuffer(50);
@@ -333,7 +333,7 @@ public class HibernateEntityDao<T> extends HibernatePageSupportDao {
 	 * @date 2016年5月21日-下午3:00:40
 	 */
 	public void deleteAllWithHql(final String hqlStr, final Map<String, Object> paramsMap){
-		getHibernateTemplate().execute(new HibernateCallback<T>() {
+		getHibernateTemplate().executeWithNativeSession(new HibernateCallback<T>() {
 			@Override
 			public T doInHibernate(Session session) throws HibernateException {
 				// TODO Auto-generated method stub
@@ -352,7 +352,7 @@ public class HibernateEntityDao<T> extends HibernatePageSupportDao {
 		});
 	} 
 	public void deleteAllWithSql(final String sqlStr, final Map<String, Object> paramsMap) {
-		getHibernateTemplate().execute(new HibernateCallback<T>() {
+		getHibernateTemplate().executeWithNativeSession(new HibernateCallback<T>() {
 			@Override
 			public T doInHibernate(Session session) throws HibernateException {
 				// TODO Auto-generated method stub
@@ -370,7 +370,7 @@ public class HibernateEntityDao<T> extends HibernatePageSupportDao {
 		});
 	}
 	public void updateAllWithHql(final String hqlStr, final Map<String, Object> paramsMap){
-		getHibernateTemplate().execute(new HibernateCallback<T>() {
+		getHibernateTemplate().executeWithNativeSession(new HibernateCallback<T>() {
 			@Override
 			public T doInHibernate(Session session) throws HibernateException {
 				// TODO Auto-generated method stub
@@ -389,7 +389,7 @@ public class HibernateEntityDao<T> extends HibernatePageSupportDao {
 		});
 	}
 	public void updateAllWithSql(final String sqlStr, final Map<String, Object> paramsMap) {
-		getHibernateTemplate().execute(new HibernateCallback<T>() {
+		getHibernateTemplate().executeWithNativeSession(new HibernateCallback<T>() {
 			@Override
 			public T doInHibernate(Session session) throws HibernateException {
 				// TODO Auto-generated method stub
