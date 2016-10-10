@@ -17,7 +17,7 @@ public class ArrayUtils {
      * @param ids
      * @return
      */
-    public static  String listToDotString(List<Integer> ids){
+    public static  String listToDotString(List ids){
         if(CollectionUtils.isNotEmpty(ids)){
             return ids.toString().replace("[","").replace("]"," ").trim();
         }
