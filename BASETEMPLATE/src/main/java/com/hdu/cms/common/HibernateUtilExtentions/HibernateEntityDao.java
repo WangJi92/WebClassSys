@@ -104,7 +104,7 @@ public class HibernateEntityDao<T> extends HibernatePageSupportDao {
 	 * @date 2016年5月21日-下午2:08:19
 	 */
 	public T findById(Class<T> inputEntity,Serializable id){
-		Assert.isNull(inputEntity, "is not null");
+		Assert.notNull(inputEntity, "is not null");
 		return getHibernateTemplate().get(inputEntity, id);
 	}
 	/**
@@ -115,7 +115,7 @@ public class HibernateEntityDao<T> extends HibernatePageSupportDao {
 	 * @date 2016年5月21日-下午2:17:14
 	 */
 	public List<T> findAll(Class<T> inputEntity){
-		Assert.isNull(inputEntity, "is not null");
+		Assert.notNull(inputEntity, "is not null");
 		return getHibernateTemplate().loadAll(inputEntity);
 		
 	}
