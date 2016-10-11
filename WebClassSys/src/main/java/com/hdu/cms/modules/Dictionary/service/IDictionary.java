@@ -6,6 +6,7 @@ import com.hdu.cms.common.Utils.SelectBean;
 import com.hdu.cms.modules.Dictionary.entity.Dictionary;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by JetWang on 2016/10/10.
@@ -18,6 +19,19 @@ public interface IDictionary {
      */
     public List<SelectBean> getDicSelectBaeanByType(DICTIONARY dictionary);
 
+    /**
+     * 得到当前Dic类型下的Map的值
+     * @param dictionary
+     * @return
+     */
+    public Map<String,Integer> getDicMapByTypeKeyString(DICTIONARY dictionary);
+
+    /**
+     * 得到当前Dic类型下的Map的值 反转
+     * @param dictionary
+     * @return
+     */
+    public Map<Integer,String> getDicMapByTypeKeyInteger(DICTIONARY dictionary);
     /**
      *
      * @param dictionary

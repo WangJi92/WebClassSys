@@ -1,6 +1,7 @@
 package com.hdu.cms.modules.Dictionary.dao;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.hdu.cms.common.ConstantParam.STATE;
 import com.hdu.cms.common.HibernateUtilExtentions.HibernateEntityDao;
 import com.hdu.cms.common.HibernateUtilExtentions.PageBean;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by JetWang on 2016/10/10.
@@ -98,6 +100,36 @@ public class DictionaryDao  extends HibernateEntityDao<Dictionary>{
         return Lists.newArrayList();
     }
 
+    /**
+     * 得到当前类型的Map数组
+     * @param classfiyType
+     * @return
+     */
+    public Map<String,Integer> dicGetAllMapKeyStringClassfyByType(String classfiyType){
+        List<Dictionary> dictionaryList =dicGetAllClassfyByType(classfiyType);
+        Map<String,Integer> map = Maps.newHashMap();
+        if(CollectionUtils.isNotEmpty(dictionaryList)){
+            for(Dictionary item : dictionaryList){
+                map.put(item.getName(),item.getValue());
+            }
+        }
+        return map;
+    }
+    /**
+     * 得到当前类型的Map数组 rev
+     * @param classfiyType
+     * @return
+     */
+    public Map<Integer,String> dicGetAllMapKeyIntegerClassfyByType(String classfiyType){
+        List<Dictionary> dictionaryList =dicGetAllClassfyByType(classfiyType);
+        Map<Integer,String> map = Maps.newHashMap();
+        if(CollectionUtils.isNotEmpty(dictionaryList)){
+            for(Dictionary item : dictionaryList){
+                map.put(item.getValue(),item.getName());
+            }
+        }
+        return map;
+    }
     /**
      * 分页查看当前的数据信息
      * @param pageNo
