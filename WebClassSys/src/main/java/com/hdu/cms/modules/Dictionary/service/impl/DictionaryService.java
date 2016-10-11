@@ -30,9 +30,9 @@ public class DictionaryService implements IDictionary, InitializingBean {
     /**
      *使用缓存处理信息，不用每次都去查找数据库信息，这样不好！
      */
-    private static Map<DICTIONARY, Map<String, Integer>> mapString = Maps.newHashMap();
-    private static Map<DICTIONARY, Map<Integer, String>> mapInteger = Maps.newHashMap();
-    private static Map<DICTIONARY, List<SelectBean>> mapSelectBean = Maps.newHashMap();
+    public  static Map<DICTIONARY, Map<String, Integer>> mapString = Maps.newHashMap();
+    public static Map<DICTIONARY, Map<Integer, String>> mapInteger = Maps.newHashMap();
+    public static Map<DICTIONARY, List<SelectBean>> mapSelectBean = Maps.newHashMap();
 
     @Override
     public void afterPropertiesSet() throws Exception {
