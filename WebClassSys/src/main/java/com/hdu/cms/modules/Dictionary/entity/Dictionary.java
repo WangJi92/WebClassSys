@@ -6,7 +6,7 @@ import java.io.Serializable;
 /**
  * Created by JetWang on 2016/10/10.
  */
-@Entity(name = "dictionary")
+@Entity
 public class Dictionary implements Serializable {
 
     @Id
@@ -48,6 +48,7 @@ public class Dictionary implements Serializable {
      */
     @Column(name = "dic_fatherstate",length = 2)
     private Integer fatherState;
+
 
     public Integer getId() {
         return id;

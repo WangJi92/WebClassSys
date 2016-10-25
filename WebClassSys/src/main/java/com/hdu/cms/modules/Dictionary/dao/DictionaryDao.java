@@ -8,10 +8,12 @@ import com.hdu.cms.common.HibernateUtilExtentions.PageBean;
 import com.hdu.cms.common.Utils.ArrayUtils;
 import com.hdu.cms.modules.Dictionary.entity.Dictionary;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,6 +24,7 @@ import java.util.Map;
  * Created by JetWang on 2016/10/10.
  */
 @Repository(value="dictionaryDao")
+@Transactional(readOnly = false)
 public class DictionaryDao  extends HibernateEntityDao<Dictionary>{
 
     /**
@@ -30,6 +33,7 @@ public class DictionaryDao  extends HibernateEntityDao<Dictionary>{
      */
     public void dicSaveOrUpdate(Dictionary dictionary){
         super.saveOrUpdate(dictionary);
+        super.flush();
     }
 
     /**
@@ -101,6 +105,20 @@ public class DictionaryDao  extends HibernateEntityDao<Dictionary>{
     }
 
     /**
+     * 找到当前父节点的所有的信息
+     * @return
+     */
+    public List<Dictionary> dicGetFatherClassFy(){
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(Dictionary.class);
+        detachedCriteria.add(Restrictions.eq("fatherState",STATE.YES.getValue()));
+        List<Dictionary> dictionaries = super.findAllByCriteria(detachedCriteria);
+        if(CollectionUtils.isNotEmpty(dictionaries)){
+            return dictionaries;
+        }
+        return Lists.newArrayList();
+    }
+
+    /**
      * 得到当前类型的Map数组
      * @param classfiyType
      * @return
@@ -136,9 +154,25 @@ public class DictionaryDao  extends HibernateEntityDao<Dictionary>{
      * @param pageSize
      * @return
      */
-    public PageBean<Dictionary> dicFindPageBean(Integer pageNo,Integer pageSize){
+    public PageBean<Dictionary> dicFindPageBean(Integer pageNo,Integer pageSize,String search){
         DetachedCriteria detachedCriteria =DetachedCriteria.forClass(Dictionary.class);
-        detachedCriteria.addOrder(Order.asc("id"));
+        detachedCriteria.addOrder(Order.asc("classfiyType"));
+        if(StringUtils.isNotEmpty(search)){
+            detachedCriteria.add(Restrictions.disjunction()
+                    .add(Restrictions.like("name", "%" + search + "%"))
+                    .add(Restrictions.like("classfiyType", "%" + search + "%")));
+        }
         return  super.findPageByCriteria(detachedCriteria,pageNo,pageSize);
+    }
+
+    /**
+     * 查找所有的数据信息
+     * @return
+     */
+    public List<Dictionary> dicFindAll(){
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(Dictionary.class);
+        detachedCriteria.addOrder(Order.asc("classfiyType"));
+        return  super.findAllByCriteria(detachedCriteria);
+
     }
 }

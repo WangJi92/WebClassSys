@@ -2,18 +2,28 @@ package com.hdu.cms.modules.Dictionary.service.impl;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.hdu.cms.common.ConstantParam.ConstantParam;
 import com.hdu.cms.common.ConstantParam.DICTIONARY;
 import com.hdu.cms.common.HibernateUtilExtentions.PageBean;
-import com.hdu.cms.common.Utils.DicSelectBeanUtils;
-import com.hdu.cms.common.Utils.SelectBean;
+import com.hdu.cms.common.RequestResponseContext.RequestResponseContext;
+import com.hdu.cms.common.Utils.*;
 import com.hdu.cms.modules.Dictionary.dao.DictionaryDao;
 import com.hdu.cms.modules.Dictionary.entity.Dictionary;
 import com.hdu.cms.modules.Dictionary.service.IDictionary;
+import com.hdu.cms.modules.Equipment.entity.Equipment;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 
@@ -39,13 +49,13 @@ public class DictionaryService implements IDictionary, InitializingBean {
         reloadAll();
     }
 
-    private void reloadItem(DICTIONARY dictionary) {
+    public  void reloadItem(DICTIONARY dictionary) {
         mapString.put(dictionary, dictionaryDao.dicGetAllMapKeyStringClassfyByType(dictionary.getValue()));
         mapInteger.put(dictionary, dictionaryDao.dicGetAllMapKeyIntegerClassfyByType(dictionary.getValue()));
         mapSelectBean.put(dictionary, getSeletBean(dictionary));
     }
 
-    private void reloadAll() {
+    public  void reloadAll() {
         for (DICTIONARY item : DICTIONARY.values()) {
             mapString.put(item, dictionaryDao.dicGetAllMapKeyStringClassfyByType(item.getValue()));
             mapInteger.put(item, dictionaryDao.dicGetAllMapKeyIntegerClassfyByType(item.getValue()));
@@ -53,7 +63,7 @@ public class DictionaryService implements IDictionary, InitializingBean {
         }
     }
 
-    private List<SelectBean> getSeletBean(DICTIONARY dictionary) {
+    public  List<SelectBean> getSeletBean(DICTIONARY dictionary) {
         List<Dictionary> dictionaryList = dictionaryDao.dicGetAllClassfyByType(dictionary.getValue());
         return DicSelectBeanUtils.createSelectBean(dictionaryList);
     }
@@ -67,6 +77,12 @@ public class DictionaryService implements IDictionary, InitializingBean {
     @Override
     public List<SelectBean> getDicSelectBaeanByType(DICTIONARY dictionary) {
         return mapSelectBean.get(dictionary);
+    }
+
+    @Override
+    public List<SelectBean> getDicFatherSelectBean() {
+        List<Dictionary> dictionaryList = dictionaryDao.dicGetFatherClassFy();
+        return DicSelectBeanUtils.createSelectBean(dictionaryList);
     }
 
     @Override
@@ -86,7 +102,7 @@ public class DictionaryService implements IDictionary, InitializingBean {
      */
     @Override
     public void saveOrUpdateDic(Dictionary dictionary) {
-        dictionaryDao.saveOrUpdate(dictionary);
+        dictionaryDao.dicSaveOrUpdate(dictionary);
         // 根据当前数据字典的 classfyType 查找到
         DICTIONARY item = DICTIONARY.getDictionary(dictionary.getClassfiyType());
         //修改缓存！
@@ -110,6 +126,7 @@ public class DictionaryService implements IDictionary, InitializingBean {
      * @param indexcodes
      */
     @Override
+    @Transactional(readOnly = false)
     public void delteDicByIndexcodes(List<String> indexcodes) {
         dictionaryDao.dicDeleteByIndexCode(indexcodes);
         reloadAll();
@@ -145,8 +162,76 @@ public class DictionaryService implements IDictionary, InitializingBean {
      * @return
      */
     @Override
-    public PageBean findPageBean(Integer pageNo, Integer pageSize) {
-        return dictionaryDao.dicFindPageBean(pageNo, pageSize);
+    public PageBean findPageBean(Integer pageNo, Integer pageSize,String serarch) {
+        return dictionaryDao.dicFindPageBean(pageNo, pageSize,serarch);
+    }
+    @Override
+    public List<Dictionary> findAllDic() {
+        return dictionaryDao.dicFindAll();
     }
 
+    @Override
+    public void exprotDic() {
+        OutputStream output = ExcelUtil.getOutputStreamForExcelExport(RequestResponseContext.getResponse(), "dictionary");
+        WritableWorkbook wbook = null;
+        InputStream input = null;
+        try {
+            //获得gen 目录
+            input = new FileInputStream(HttpRequestUtils.getWebContextRootPath()+ File.separator+
+                    ConstantParam.DEFAULT_EXCEL_PATH
+                    +ConstantParam.EXPORT_DIC);
+            //从之前存在的xls中创建新的excel
+            wbook = Workbook.createWorkbook(output, Workbook.getWorkbook(input));
+            WritableSheet sheet = wbook.getSheet(0);
+            exportDicSheet(sheet);
+        } catch (IOException e){
+            e.printStackTrace();
+            LogUtils.logException(e);
+        }
+        catch (BiffException e){
+            e.printStackTrace();
+            LogUtils.logException(e);
+        }finally {
+            try {
+                if(wbook!=null){
+                    wbook.write();
+                    wbook.close();
+                }
+                if(output != null){
+                    output.flush();
+                    output.close();
+                }
+                if(input != null){
+                    input.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                LogUtils.logException(e);
+            } catch (WriteException e) {
+                e.printStackTrace();
+                LogUtils.logException(e);
+            }
+        }
+    }
+
+    private void exportDicSheet(WritableSheet sheet){
+        int row =0;
+        int col =0;
+        try {
+            List<Dictionary> dictionaryList= findAllDic();
+            if(CollectionUtils.isNotEmpty(dictionaryList)){
+                for(Dictionary Item : dictionaryList){
+                    row++;
+                    col=0;
+                    sheet.addCell(new Label(col++,row,Item.getClassfiyType()));//字典分类
+                    sheet.addCell(new Label(col++,row,Item.getName()));//字典名称
+                    sheet.addCell(new Label(col++,row,Item.getValue().toString()));//字典值
+                    sheet.addCell(new Label(col++,row,(Item.getFixed() !=null && Item.getFixed()==1)?"是":"否"));
+                    sheet.addCell(new Label(col++,row,(Item.getFatherState() !=null && Item.getFatherState()==1)?"是":"否"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

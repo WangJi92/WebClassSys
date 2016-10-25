@@ -19,6 +19,8 @@ public interface IDictionary {
      */
     public List<SelectBean> getDicSelectBaeanByType(DICTIONARY dictionary);
 
+    public List<SelectBean> getDicFatherSelectBean();
+
     /**
      * 得到当前Dic类型下的Map的值
      * @param dictionary
@@ -70,10 +72,15 @@ public interface IDictionary {
      * @param pageSize
      * @return
      */
-    public PageBean findPageBean(Integer pageNo,Integer pageSize);
+    public PageBean findPageBean(Integer pageNo,Integer pageSize,String serarch);
 
 
+    public List<Dictionary> findAllDic();
 
+    /**
+     * 导出为excel
+     */
+    public void exprotDic();
 
 
 }
