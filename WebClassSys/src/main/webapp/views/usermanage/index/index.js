@@ -25,7 +25,7 @@ define(basePath + "/views/usermanage/index/index",
         var options ={
             striped: true,  //表格显示条纹
             pagination: true, //启动分页
-            pageSize: 15,  //每页显示的记录数
+            pageSize: 10,  //每页显示的记录数
             pageNumber:1, //当前第几页
             pageList: [10, 15, 20, 25],  //记录数可选列表
             search: true,  //是否启用查询
@@ -57,7 +57,7 @@ define(basePath + "/views/usermanage/index/index",
             onLoadError: function(){  //加载失败时执行
 
             },
-            height: getHeight(),
+           // height: getHeight(),
             formatSearch:function(){
                 return "登录名密码手机.."
             },
@@ -152,23 +152,6 @@ define(basePath + "/views/usermanage/index/index",
 
             $(".dic_export").click(function(){//导出excel
                 window.open(basePath+"/UserInfo/exportUserInfo");
-                /*$userService.exportExcel(function(data){
-                    if(data.success ==false){
-                        var dialogTip = new BootstrapDialog({
-                            message: data.message,
-                            cssClass: "width200-dialog",
-                            onshow: function (diaRef) {
-                                setTimeout(function () {
-                                    diaRef.close();
-                                }, 1500);
-                            }
-                        });
-                        dialogTip.realize();
-                        dialogTip.getModalHeader().hide();
-                        dialogTip.getModalFooter().hide();
-                        dialogTip.open();
-                    }
-                });*/
             });
         }
         function getIdSelections() {
