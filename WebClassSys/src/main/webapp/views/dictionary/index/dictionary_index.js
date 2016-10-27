@@ -149,11 +149,51 @@ define(basePath + "/views/dictionary/index/dictionary_index",
                 if(ids.length>0){
                     $dicService.deleteByIds(ids,function(data){
                         if(data.success ==true){
+                            var dialogTip = new BootstrapDialog({
+                                message: "删除成功",
+                                cssClass: "width200-dialog",
+                                onshow: function (diaRef) {
+                                    setTimeout(function () {
+                                        diaRef.close();
+                                    }, 1500);
+                                }
+                            });
+                            dialogTip.realize();
+                            dialogTip.getModalHeader().hide();
+                            dialogTip.getModalFooter().hide();
+                            dialogTip.open();
                             $tableDic.bootstrapTable('refresh');//刷新
                         }else{
+                            var dialogTip = new BootstrapDialog({
+                                message: data.message,
+                                cssClass: "width200-dialog",
+                                onshow: function (diaRef) {
+                                    setTimeout(function () {
+                                        diaRef.close();
+                                    }, 1500);
+                                }
+                            });
+                            dialogTip.realize();
+                            dialogTip.getModalHeader().hide();
+                            dialogTip.getModalFooter().hide();
+                            dialogTip.open();
                             console.log("error");
                         }
                     });
+                }else{
+                    var dialogTip = new BootstrapDialog({
+                        message: "请选择要删除的记录",
+                        cssClass: "width200-dialog",
+                        onshow: function (diaRef) {
+                            setTimeout(function () {
+                                diaRef.close();
+                            }, 1500);
+                        }
+                    });
+                    dialogTip.realize();
+                    dialogTip.getModalHeader().hide();
+                    dialogTip.getModalFooter().hide();
+                    dialogTip.open();
                 }
 
             });

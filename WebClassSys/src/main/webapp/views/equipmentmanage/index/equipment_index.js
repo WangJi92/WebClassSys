@@ -147,6 +147,20 @@ define(basePath + "/views/equipmentmanage/index/equipment_index",
                             dialogTip.open();
                         }
                     });
+                }else{
+                    var dialogTip = new BootstrapDialog({
+                        message: "请选择要删除的记录",
+                        cssClass: "width200-dialog",
+                        onshow: function (diaRef) {
+                            setTimeout(function () {
+                                diaRef.close();
+                            }, 1500);
+                        }
+                    });
+                    dialogTip.realize();
+                    dialogTip.getModalHeader().hide();
+                    dialogTip.getModalFooter().hide();
+                    dialogTip.open();
                 }
             });
 
