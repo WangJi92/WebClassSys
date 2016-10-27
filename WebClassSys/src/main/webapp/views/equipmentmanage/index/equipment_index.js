@@ -25,7 +25,7 @@ define(basePath + "/views/equipmentmanage/index/equipment_index",
         var options ={
             striped: true,  //表格显示条纹
             pagination: true, //启动分页
-            pageSize: 15,  //每页显示的记录数
+            pageSize: 10,  //每页显示的记录数
             pageNumber:1, //当前第几页
             pageList: [10, 15, 20, 25],  //记录数可选列表
             search: true,  //是否启用查询
@@ -57,7 +57,7 @@ define(basePath + "/views/equipmentmanage/index/equipment_index",
             onLoadError: function(){  //加载失败时执行
 
             },
-            height: getHeight(),
+          //  height: getHeight(),
             formatSearch:function(){
                 return "名称品牌简介.."
             },
