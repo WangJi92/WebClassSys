@@ -178,4 +178,10 @@ public class EquipmentService implements IEquipmentService{
             e.printStackTrace();
         }
     }
+
+    @Override
+    public EquipmentDto getEquipmentDtoByIndexcode(String indexcode) {
+        Equipment equipment = equipmentDao.equipFindBuyIndexcode(indexcode);
+        return EntityToDto(equipment);
+    }
 }

@@ -2,6 +2,7 @@ package com.hdu.cms.modules.Equipment.service;
 
 import com.hdu.cms.common.HibernateUtilExtentions.PageBean;
 import com.hdu.cms.modules.Building.dto.BuildingInfoDto;
+import com.hdu.cms.modules.Equipment.dto.EquipmentDto;
 import com.hdu.cms.modules.Equipment.entity.Equipment;
 import com.hdu.cms.modules.UserInfo.entity.UserInfo;
 
@@ -70,4 +71,6 @@ public interface IEquipmentService {
      * 导出数据信息
      */
     public  void  exportEquipment();
+
+    public EquipmentDto getEquipmentDtoByIndexcode(String indexcode);
 }
