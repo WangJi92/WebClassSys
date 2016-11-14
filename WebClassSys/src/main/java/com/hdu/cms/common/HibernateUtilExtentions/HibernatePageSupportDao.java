@@ -37,12 +37,15 @@ public class HibernatePageSupportDao extends HibernateGenericDao {
 		if (pageNo == 0) {
 			pageNo = 1;
 		}
+		/**
+		 * 这里没有使用count函数...直接查找记录
+		 */
 		List countList = getHibernateTemplate().find(countHql, values);
 		int totalCount = 0;
-		if (null != countList && countList.size() >= 0) {
-			totalCount = ((Long) countList.get(0)).intValue();
+		if (null != countList && countList.size() > 0) {
+			totalCount = countList.size();
 		}
-		if (totalCount < 0) {
+		if (totalCount <= 0) {
 			return new PageBean();
 		} else {
 			// 实际查询返回分页对象
