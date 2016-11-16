@@ -151,14 +151,14 @@ define(basePath + "/views/applymaintainmange/applymaintainindex/applymaintainind
         }
 
         function applyFormatter(value, row, index) {
-            if(row.applyName == "" && row.applyPhone ==""){
+            if((row.applyName == "" && row.applyPhone =="")||(row.applyName == null && row.applyPhone ==null) ){
                 return "信息为空";
             }
             return "姓名:" + row.applyName + " |电话:" + row.applyPhone;
         }
 
         function maintainInfoFormatter(value, row, index) {
-            if(row.maintainPeople == "" && row.maintainPeoplePhone ==""){
+            if((row.maintainPeople == "" && row.maintainPeoplePhone =="")||(row.maintainPeople ==null && row.maintainPeoplePhone ==null)){
                 return "信息为空";
             }
             return "姓名:" + row.maintainPeople + " |电话:" + row.maintainPeoplePhone;
