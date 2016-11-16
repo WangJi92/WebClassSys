@@ -103,24 +103,6 @@ define(basePath + "/user/applymainList/js/applymainList",
                     return false;
                 }
             });
-            initSelect();
-        }
-
-        function initSelect() {
-            $dictionaryService.getDicSelectByName("DIC_URGENCYREPAIR", function (result) {
-                if (result.success == true && result.data != null) {
-                    $.each(result.data, function (index, value) {
-                        $("select[name='uergencyState']").append("<option value='" + value.value + "'>" + value.key + "</option>");
-                    });
-                }
-            });
-            $dictionaryService.getDicSelectByName("DIC_REPAIRCLASSFIY", function (result) {
-                if (result.success == true && result.data != null) {
-                    $.each(result.data, function (index, value) {
-                        $("select[name='type']").append("<option value='" + value.value + "'>" + value.key + "</option>");
-                    });
-                }
-            });
         }
         module.exports = {
             initEvent:initEvent
