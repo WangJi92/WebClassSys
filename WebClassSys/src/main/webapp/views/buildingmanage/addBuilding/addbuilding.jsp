@@ -130,6 +130,7 @@
             </form>
         </div>
     </div>
+    <%@ include file="./../../../admin/common/footter.jsp" %>
     <script type="text/javascript">
         seajs.use(basePath + "/views/buildingmanage/addBuilding/index/addbuilding_index");
     </script>

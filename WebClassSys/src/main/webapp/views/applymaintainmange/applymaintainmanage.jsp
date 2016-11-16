@@ -69,6 +69,7 @@
     </table>
   </div>
 </div>
+<%@ include file="./../../admin/common/footter.jsp" %>
 <script type="text/javascript">
   seajs.use(basePath + "/views/applymaintainmange/applymaintainindex/applymaintainindex");
 </script>

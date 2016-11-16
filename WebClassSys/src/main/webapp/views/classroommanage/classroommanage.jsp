@@ -206,7 +206,7 @@
         <ul id="pagination" class="pagination"></ul>
     </div>
 </div>
-
+<%@ include file="./../../admin/common/footter.jsp" %>
 <script type="text/javascript">
     /* seajs.use(basePath + "/views/buildingmanage/all/buildingList/js/buildingList");*/
     seajs.use(basePath + "/views/classroommanage/classroomindex/classroomindex");
