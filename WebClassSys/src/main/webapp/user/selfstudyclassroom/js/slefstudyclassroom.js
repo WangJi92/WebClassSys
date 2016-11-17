@@ -11,6 +11,11 @@ define(basePath + "/user/selfstudyclassroom/js/slefstudyclassroom",
     function (require, exports, module) {
         var $dicService = require(basePath + "/views/dictionary/service/dictionaryService");
         var $timetable;
+        var operateEvents = {
+            'click .openClassRoomDetail': function (e, value, row, index) {
+                window.location.href = basePath+"/user/classroomtableInfo/classroomtableInfo.jsp?classRoomName="+row.classRoomName;
+            }
+        };
         var timetableoptions = {
             striped: true,  //表格显示条纹
             pagination: true, //启动分页
@@ -55,7 +60,9 @@ define(basePath + "/user/selfstudyclassroom/js/slefstudyclassroom",
                     title: '教室名称',
                     field: 'classRoomName',
                     align: 'center',
-                    valign: 'middle'
+                    valign: 'middle',
+                    events: operateEvents,
+                    formatter: classRoomFormatter
                 },
                 {
                     title: '课程时间',
@@ -80,7 +87,13 @@ define(basePath + "/user/selfstudyclassroom/js/slefstudyclassroom",
                 }
             ]
         };
-
+        function classRoomFormatter(value,row,index){
+            return [
+                '<a class="openClassRoomDetail"  href="javascript:void(0)" title="点击查看教室详情">',
+                row.classRoomName,
+                '</a>  '
+            ].join('');
+        }
         function lessontimeFormatter(value, row, index) {
             return "【"+row.weekStr+"*"+row.dayStr+"*"+row.lessonStr+"】";
         }
