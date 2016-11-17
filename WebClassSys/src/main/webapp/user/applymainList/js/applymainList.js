@@ -90,7 +90,7 @@ define(basePath + "/user/applymainList/js/applymainList",
             if((row.maintainPeople == "" && row.maintainPeoplePhone =="")||(row.maintainPeople ==null && row.maintainPeoplePhone ==null)){
                 return "信息为空";
             }
-            return "姓名:" + row.maintainPeople + " |电话:" + row.maintainPeoplePhone;
+            return "【姓名:" + row.maintainPeople + " 电话:" + row.maintainPeoplePhone+"】";
         }
         function initEvent() {
             $applymaintaintable = $("#table_apply").bootstrapTable(options);
