@@ -46,16 +46,6 @@ public class TimeTableService implements ITimeTableService {
     }
 
     /**
-     * 获取教室的名称
-     * @param indexCode
-     * @return
-     */
-    private String getClassRoomName(String indexCode){
-        ClassRoom classRoom = iClassRoomService.findBuyIndexCodeEntity(indexCode);
-        return classRoom.getName();
-    }
-
-    /**
      * 是否需要教室的名称
      * @param tt
      * @param booleanGetClassRoomName
@@ -70,7 +60,10 @@ public class TimeTableService implements ITimeTableService {
         dto.setLessonStr(getWhichLesson(tt.getWhichLesson()));//哪节课
         dto.setDayStr(getWihichDay(tt.getWhiichDay()));//周几
         if(booleanGetClassRoomName){
-            dto.setClassRoomName(getClassRoomName(tt.getClassRoomIndexCode()));
+            ClassRoomDto classRoom = iClassRoomService.getClassRoomInfoByIndexCode(tt.getClassRoomIndexCode());
+            dto.setClassRoomName(classRoom.getName());//教室的名称
+            dto.setSeatNo(classRoom.getSeatNo());//座位数
+            dto.setClassTypeName(classRoom.getTypeName());//教室的类型
         }
         return dto;
     }

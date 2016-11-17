@@ -30,6 +30,25 @@ public class TimeTableDto {
     private Integer whichLesson;
     private String  lessonStr;
 
+    private Integer seatNo;//座位数
+    private String classTypeName;//教室类型的中文结果哦
+
+    public Integer getSeatNo() {
+        return seatNo;
+    }
+
+    public void setSeatNo(Integer seatNo) {
+        this.seatNo = seatNo;
+    }
+
+    public String getClassTypeName() {
+        return classTypeName;
+    }
+
+    public void setClassTypeName(String classTypeName) {
+        this.classTypeName = classTypeName;
+    }
+
     public String getLessonStr() {
         return lessonStr;
     }
