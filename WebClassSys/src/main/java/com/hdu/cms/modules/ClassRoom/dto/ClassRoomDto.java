@@ -33,6 +33,15 @@ public class ClassRoomDto implements Serializable {
     private String name;
     private Integer seatNo;
     private String buildingIndexCode;
+
+    private String buildingName;//教学楼名称
+    private String dutyRoomPeoplePhone;//教学楼值班人员信息
+    private String dutyRoomPeopleName;
+
+    private String maintancePeoplePhone;//教学楼维修人员信息
+    private String maintancePeopleName;
+
+
     /**
      * 教室的类别，多媒体教室还是其他的教室
      */
@@ -44,6 +53,46 @@ public class ClassRoomDto implements Serializable {
     private Integer floorNo;
 
     private String pictures;
+
+    public String getBuildingName() {
+        return buildingName;
+    }
+
+    public void setBuildingName(String buildingName) {
+        this.buildingName = buildingName;
+    }
+
+    public String getDutyRoomPeoplePhone() {
+        return dutyRoomPeoplePhone;
+    }
+
+    public void setDutyRoomPeoplePhone(String dutyRoomPeoplePhone) {
+        this.dutyRoomPeoplePhone = dutyRoomPeoplePhone;
+    }
+
+    public String getDutyRoomPeopleName() {
+        return dutyRoomPeopleName;
+    }
+
+    public void setDutyRoomPeopleName(String dutyRoomPeopleName) {
+        this.dutyRoomPeopleName = dutyRoomPeopleName;
+    }
+
+    public String getMaintancePeoplePhone() {
+        return maintancePeoplePhone;
+    }
+
+    public void setMaintancePeoplePhone(String maintancePeoplePhone) {
+        this.maintancePeoplePhone = maintancePeoplePhone;
+    }
+
+    public String getMaintancePeopleName() {
+        return maintancePeopleName;
+    }
+
+    public void setMaintancePeopleName(String maintancePeopleName) {
+        this.maintancePeopleName = maintancePeopleName;
+    }
 
     public String getPictures() {
         return pictures;

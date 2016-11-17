@@ -16,7 +16,7 @@ public interface IClassRoomService {
      * @param pageNo
      * @return
      */
-    public PageBean findPageInfo(Integer pageSize,Integer pageNo,String name,String buildindexcode);
+    public PageBean findPageInfo(Integer pageSize,Integer pageNo,String name,String buildindexcode,Integer type);
 
 
     public void saveOrUpdate(ClassRoom classRoom);

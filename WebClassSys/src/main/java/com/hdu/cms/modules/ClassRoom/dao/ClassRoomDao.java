@@ -73,9 +73,12 @@ public class ClassRoomDao extends HibernateEntityDao<ClassRoom> {
      * @param pageSize
      * @return
      */
-    public PageBean<ClassRoom> cmPageBean(Integer pageNo,Integer pageSize,String search,String buildingIndexCode){
+    public PageBean<ClassRoom> cmPageBean(Integer pageNo,Integer pageSize,String search,String buildingIndexCode,Integer type){
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(ClassRoom.class);
         detachedCriteria.addOrder(org.hibernate.criterion.Order.asc("id"));
+        if(type !=null && -1 !=type){
+            detachedCriteria.add(Restrictions.eq("type",type));
+        }
         if(StringUtils.isNotEmpty(search)){
             detachedCriteria.add(Restrictions.like("name","%"+search+"%"));
         }

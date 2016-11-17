@@ -104,14 +104,14 @@ public class ClassRoomAction extends BaseAction {
 
     @RequestMapping(value = "findPage")
     @ResponseBody
-    public ActionResult findPage(Integer pageSize, Integer pageNo, String name, String buildingIndexCode) {
+    public ActionResult findPage(Integer pageSize, Integer pageNo, String name, String buildingIndexCode,Integer type) {
         ActionResult result = new ActionResult(true);
         try {
             if (pageNo == null || pageSize == null) {
                 pageNo = ConstantParam.DEFAULT_PAGE_NO;
                 pageSize = ConstantParam.DEFAULT_PAGE_SIZE;
             }
-            PageBean pageBean = iClassRoomService.findPageInfo(pageSize, pageNo, name, buildingIndexCode);
+            PageBean pageBean = iClassRoomService.findPageInfo(pageSize, pageNo, name, buildingIndexCode,type);
             result.setData(pageBean);
         } catch (Exception e) {
             e.printStackTrace();

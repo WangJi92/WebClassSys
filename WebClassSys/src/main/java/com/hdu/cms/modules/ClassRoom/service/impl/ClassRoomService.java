@@ -3,6 +3,8 @@ package com.hdu.cms.modules.ClassRoom.service.impl;
 import com.google.common.collect.Lists;
 import com.hdu.cms.common.ConstantParam.DICTIONARY;
 import com.hdu.cms.common.HibernateUtilExtentions.PageBean;
+import com.hdu.cms.modules.Building.dto.BuildingInfoDto;
+import com.hdu.cms.modules.Building.service.IBuildingInfoService;
 import com.hdu.cms.modules.ClassRoom.dao.ClassRoomDao;
 import com.hdu.cms.modules.ClassRoom.dto.ClassRoomDto;
 import com.hdu.cms.modules.ClassRoom.entity.ClassRoom;
@@ -33,9 +35,12 @@ public class ClassRoomService  implements IClassRoomService{
     @Resource
     private IClassRoomEquipmentService iClassRoomEquipmentService;
 
+    @Resource
+    private IBuildingInfoService iBuildingInfoService;//教学楼信息查询
+
     @Override
-    public PageBean findPageInfo(Integer pageSize, Integer pageNo, String name, String buildindexcode) {
-        PageBean oldPageBean = classRoomDao.cmPageBean(pageNo,pageSize,name,buildindexcode);
+    public PageBean findPageInfo(Integer pageSize, Integer pageNo, String name, String buildindexcode,Integer type) {
+        PageBean oldPageBean = classRoomDao.cmPageBean(pageNo,pageSize,name,buildindexcode,type);
         if(oldPageBean!=null && CollectionUtils.isNotEmpty(oldPageBean.getRows())){
             PageBean newPageBean = new PageBean();
             List<ClassRoom> classRoomList = oldPageBean.getRows();
@@ -54,6 +59,19 @@ public class ClassRoomService  implements IClassRoomService{
         Map<Integer,String> map = DictionaryService.mapInteger.get(DICTIONARY.CLASSROOM);
         BeanUtils.copyProperties(Item,dto);
         dto.setTypeName(map.get(Item.getType()));
+        if(StringUtils.isNotEmpty(Item.getBuildingIndexCode())){
+            /**
+             * todo 加载教学楼信息字段 包括教学楼的名称 教学楼值班人员的信息字段
+             */
+           BuildingInfoDto buildingInfoDto = iBuildingInfoService.getBuildingInfoByIndexCode(Item.getBuildingIndexCode());
+            if(buildingInfoDto !=null){
+                dto.setBuildingName(buildingInfoDto.getName());
+                dto.setMaintancePeoplePhone(buildingInfoDto.getMaintancePeoplePhone());
+                dto.setMaintancePeopleName(buildingInfoDto.getMaintancePeopleName());
+                dto.setDutyRoomPeopleName(buildingInfoDto.getDutyRoomPeopleName());
+                dto.setDutyRoomPeoplePhone(buildingInfoDto.getDutyRoomPeoplePhone());
+            }
+        }
         return dto;
     }
 
