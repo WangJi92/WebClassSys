@@ -109,7 +109,7 @@ define(basePath + "/user/applyclassroom/dialog/applyclassroomdialog/js/applyclas
                             cssClass: "width200-dialog",
                             onshow: function (diaRef) {
                                 setTimeout(function () {
-                                    diaRef.colse();
+                                    diaRef.close();
                                 }, 1500);
                             }
                         });
