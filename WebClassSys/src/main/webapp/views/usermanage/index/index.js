@@ -5,12 +5,10 @@
 define(basePath + "/views/usermanage/index/index",
     [basePath + "/views/usermanage/dialog/add/js/user_add",
         basePath + "/views/usermanage/service/userService",
-        basePath + "/views/usermanage/dialog/edit/js/user_edit"
     ],
     function(require, exports,module) {
         var $tableUserManage;
-        var $addDialog = require(basePath + "/views/usermanage/dialog/add/js/user_add");
-        var $editDialog =require(basePath + "/views/usermanage/dialog/edit/js/user_edit");
+        var $userInfoEditAddDialog = require(basePath + "/views/usermanage/dialog/add/js/user_add");
         var $userService =require(basePath + "/views/usermanage/service/userService");
         /**
          * 这个事件要写在前面一点
@@ -18,7 +16,7 @@ define(basePath + "/views/usermanage/index/index",
          */
         var operateEvents = {
             'click .like': function (e, value, row, index) {
-                $editDialog.editUserDialog($tableUserManage,row);
+                $userInfoEditAddDialog.opendAddDialog($tableUserManage,row);
             }
         };
         //设置 bootstrap-tablb 配置信息
@@ -68,8 +66,14 @@ define(basePath + "/views/usermanage/index/index",
                     align: 'center',
                     valign: 'middle'
                 }, {
-                    title: '登录名',
+                    title: '姓名',
                     field: 'userName',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    title: '登录名',
+                    field: 'loginAccount',
                     align: 'center',
                     valign: 'middle'
                 },
@@ -109,7 +113,7 @@ define(basePath + "/views/usermanage/index/index",
             $tableUserManage = $("#table").bootstrapTable(options);
 
             $(".dic_add").click(function(){//添加
-                $addDialog.opendAddDialog($tableUserManage);
+                $userInfoEditAddDialog.opendAddDialog($tableUserManage);
             });
             $(".dic_delete").click(function () {//删除
                 var ids = getIdSelections();

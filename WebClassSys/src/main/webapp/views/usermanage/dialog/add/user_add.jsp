@@ -7,10 +7,19 @@
       <input name="id" hidden>
       <div class="control-label col-md-3">
         <font color="red">*</font>
-         登陆名
+         姓名
       </div>
       <div class="col-md-8">
-        <input name="userName" class="form-control" type="text" placeholder="登录名.">
+        <input name="userName" class="form-control" type="text" placeholder="姓名">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="control-label col-md-3">
+        <font color="red">*</font>
+        登陆名
+      </div>
+      <div class="col-md-8">
+        <input name="loginAccount" class="form-control" type="text" placeholder="登陆名.">
       </div>
     </div>
     <div class="form-group">
@@ -39,3 +48,8 @@
     </div>
   </div>
 </form>
+<script>
+  seajs.use(basePath + "/views/usermanage/dialog/add/js/user_add",function(data){
+    data.initEvent();
+  })
+</script>
