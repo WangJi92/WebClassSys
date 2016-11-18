@@ -12,7 +12,7 @@
 <script src="<%=baseUrl%>/libs/ajaxfileupload.js" type="text/javascript"></script>
 <script id="item_picture" type="text/xml">
   <li class="list-group-item ">
-          <a class="fancybox" href="{{path}}">查看图片</a>
+          <a class="fancybox classroomfancybox" href="{{path}}">查看图片</a>
           <button type="button" class="btn btn-default btn_picture_delete"
            style="position: absolute;right: 10px;top:2px;" title="删除">
           <i class="glyphicon glyphicon-trash"></i></button>

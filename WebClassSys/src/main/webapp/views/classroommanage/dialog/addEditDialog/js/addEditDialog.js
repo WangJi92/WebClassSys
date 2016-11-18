@@ -139,10 +139,11 @@ define(basePath + "/views/classroommanage/dialog/addEditDialog/js/addEditDialog"
             } else {
                 //这里是查找图片的路径
                 var pictureList = [];
-                $(".fancybox").each(function (i) {
+                $(".classroomfancybox").each(function (i) {
                     var Item = $(this).prop("href").replace(basePath + "/image/", "");
                     pictureList.push(Item);
                 });
+                console.log(pictureList)
                 var data = {
                     pictures: JSON.stringify(pictureList),
                     seatNo: $("input[name='seatNo']").val(),
@@ -152,7 +153,7 @@ define(basePath + "/views/classroommanage/dialog/addEditDialog/js/addEditDialog"
                     type: $("*[name='type']").prop("value"),
                     buildingIndexCode: $(".buildingIndexcode").val()
                 }
-                if ($("input[name='id']").val() != "" && $("input[name='indexcode']").val() != "") {
+                if ($("input[name='id']").val() != "" ||  $("input[name='indexcode']").val() != "") {
                     data.id = $("input[name='id']").val();
                     data.indexCode = $("input[name='indexcode']").val();
                 }
@@ -199,7 +200,11 @@ define(basePath + "/views/classroommanage/dialog/addEditDialog/js/addEditDialog"
         }
 
         function initEvents() {
-            $('.fancybox').fancybox();
+            $(".list_picture_group_dialog").on("click",".classroomfancybox",function(){
+                $.fancybox.open({
+                    href:$(this).href
+                })
+            })
             $(".list_picture_group_dialog").on("click", ".btn_picture_delete", function () {
                 $(this).parent().remove();
             });//动态绑定监听事件
