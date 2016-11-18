@@ -4,14 +4,12 @@
 define(basePath + "/views/dictionary/index/dictionary_index",
     ["mustache",
         basePath+"/views/dictionary/dialog/add/js/dic_add",
-        basePath+"/views/dictionary/dialog/edit/js/dic_edit",
         basePath+"/views/dictionary/service/dictionaryService"
     ],
     function(require, exports,module) {
 
         var $dicService = require(basePath+"/views/dictionary/service/dictionaryService");
-        var $dicAddDialog = require(basePath+"/views/dictionary/dialog/add/js/dic_add");
-        var $dicEditDialog =require(  basePath+"/views/dictionary/dialog/edit/js/dic_edit");
+        var $dicAddAndEditDialog = require(basePath+"/views/dictionary/dialog/add/js/dic_add");
          var $tableDic;
 
         /**
@@ -20,7 +18,7 @@ define(basePath + "/views/dictionary/index/dictionary_index",
          */
         var operateEvents = {
             'click .like': function (e, value, row, index) {
-                $dicEditDialog.openEditDialog(row,$tableDic);
+                $dicAddAndEditDialog.openAddDialog($tableDic,row);
             }
         };
         //设置 bootstrap-tablb 配置信息
@@ -142,7 +140,7 @@ define(basePath + "/views/dictionary/index/dictionary_index",
             $tableDic = $("#table").bootstrapTable(options);
 
             $(".dic_add").click(function(){
-                $dicAddDialog.openAddDialog($tableDic);
+                $dicAddAndEditDialog.openAddDialog($tableDic);
             });
             $(".dic_delete").click(function () {
                 var ids = getIdSelections();

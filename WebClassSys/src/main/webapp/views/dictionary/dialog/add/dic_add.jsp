@@ -3,7 +3,7 @@
 <form id="dicDialog" class="form-horizontal" role="form">
   <div class="form-body">
     <div class="form-group">
-
+      <input  name="id" type="hidden">
       <div class="control-label col-md-3">
         <font color="red">*</font>
         字典名称
@@ -30,3 +30,8 @@
     </div>
   </div>
 </form>
+<script>
+  seajs.use(basePath + "/views/dictionary/dialog/add/js/dic_add",function(data){
+    data.initEvent();
+  });
+</script>
