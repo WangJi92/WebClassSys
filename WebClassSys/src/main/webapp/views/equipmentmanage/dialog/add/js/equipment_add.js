@@ -2,7 +2,8 @@
  * Created by JetWang on 2016/10/24.
  */
 define(basePath + "/views/equipmentmanage/dialog/add/js/equipment_add",
-    [basePath + "/views/equipmentmanage/service/equipment_service",
+    [
+        basePath + "/views/equipmentmanage/service/equipment_service",
         basePath + "/views/dictionary/service/dictionaryService"
     ],
     function (require, exports, module) {
@@ -11,8 +12,9 @@ define(basePath + "/views/equipmentmanage/dialog/add/js/equipment_add",
         var $equipmentService = require(basePath + "/views/equipmentmanage/service/equipment_service");
         var $equipmentAddDialog;
         var $tableEquipment;
+        var $row=null;
         var options = {
-            title: "添加设备",
+            title: "设备信息",
             cssClass: "width400-dialog",
             type: BootstrapDialog.TYPE_DEFAULT,
             draggable: true,
@@ -23,19 +25,19 @@ define(basePath + "/views/equipmentmanage/dialog/add/js/equipment_add",
                 return $message;
             },
             data: {
-                "removePath": basePath + "/equipment/equipmentView"
+                "removePath": basePath + "/views/equipmentmanage/dialog/add/equipment_add.jsp"
             },
             buttons: [{
                 id: "add_save",
                 label: "保存",
                 cssClass: 'btn-primary',
                 action: function (dialogRef) {
-                    console.log($("form[id='dialog_form_eq']").serialize());
+
                     $equipmentService.saveOrUpdate($("form[id='dialog_form_eq']").serialize(), function (data) {
-                        console.log(data);
+
                         if (data.success == true) {
                             var dialogTip = new BootstrapDialog({
-                                message: "添加成功",
+                                message: "操作成功",
                                 cssClass: "width200-dialog",
                                 onshow: function (diaRef) {
                                     setTimeout(function () {
@@ -77,22 +79,34 @@ define(basePath + "/views/equipmentmanage/dialog/add/js/equipment_add",
                 }
             ],
             onshown: function (dialogRef) {
-                $dicService.getDicSelectByName("DIC_EQUIPMENT", function (result) {
-                    if (result.success == true && result.data != null) {
-                        console.log(result);
-                        $.each(result.data, function (index, value) {
-                            $("select[name='type']").append("<option value='" + value.value + "'>" + value.key + "</option>");
-                        });
-                    }
-                });
+                //这里显示太慢了...
             }
         };
         module.exports = {
-            opendAddDialog: function (tableRef) {
+            opendAddDialog: function (tableRef,row) {
                 $tableEquipment = tableRef;
+                $row= row;
                 $equipmentAddDialog = BootstrapDialog.show(options);
-            }
+            },
+            initEvent:initEvent
 
+        }
+
+        function initEvent(){
+            $dicService.getDicSelectByName("DIC_EQUIPMENT", function (result) {
+                if (result.success == true && result.data != null) {
+                    $.each(result.data, function (index, value) {
+                        $("select[name='type']").append("<option value='" + value.value + "'>" + value.key + "</option>");
+                    });
+                }
+            });
+            if($row !=null){
+                $("input[name='name']").attr("value",$row.name);
+                $("input[name='brandName']").attr("value",$row.brandName);
+                $("*[name='introduce']").attr("value",$row.introduce);
+                $("input[name='id']").attr("value",$row.id);
+                $("*[name='type']").find("option[value='" + $row.type + "']").attr("selected", true);
+            }
         }
 
     })

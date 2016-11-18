@@ -45,3 +45,8 @@
     </div>
   </div>
 </form>
+<script>
+  seajs.use(basePath + "/views/equipmentmanage/dialog/add/js/equipment_add",function(data){
+    data.initEvent();
+  })
+</script>

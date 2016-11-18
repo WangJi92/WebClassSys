@@ -5,12 +5,10 @@
 define(basePath + "/views/equipmentmanage/index/equipment_index",
     [basePath + "/views/equipmentmanage/dialog/add/js/equipment_add",
         basePath + "/views/equipmentmanage/service/equipment_service",
-        basePath + "/views/equipmentmanage/dialog/edit/js/equipment_edit"
     ],
     function(require, exports,module) {
         var $tableEquipmentManage;
-        var $addDialog_eq = require(basePath + "/views/equipmentmanage/dialog/add/js/equipment_add");
-        var $editDialog_eq =require(basePath + "/views/equipmentmanage/dialog/edit/js/equipment_edit");
+        var $equipmentaddandeditdialog = require(basePath + "/views/equipmentmanage/dialog/add/js/equipment_add");
         var $equipmentService =require(basePath + "/views/equipmentmanage/service/equipment_service");
         /**
          * 这个事件要写在前面一点
@@ -18,7 +16,7 @@ define(basePath + "/views/equipmentmanage/index/equipment_index",
          */
         var operateEvents = {
             'click .like': function (e, value, row, index) {
-                $editDialog_eq.editDialog($tableEquipmentManage,row);
+                $equipmentaddandeditdialog.opendAddDialog($tableEquipmentManage,row);
             }
         };
         //设置 bootstrap-tablb 配置信息
@@ -109,7 +107,7 @@ define(basePath + "/views/equipmentmanage/index/equipment_index",
             $tableEquipmentManage = $("#table_equipment").bootstrapTable(options);
 
             $(".eq_add").click(function(){//添加
-                $addDialog_eq.opendAddDialog($tableEquipmentManage);
+                $equipmentaddandeditdialog.opendAddDialog($tableEquipmentManage,null);
             });
             $(".eq_delete").click(function () {//删除
                 var ids = getIdSelections();
