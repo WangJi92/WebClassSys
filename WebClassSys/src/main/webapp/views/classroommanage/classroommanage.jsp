@@ -57,13 +57,15 @@
                         </ul>
                     </div>
                     <div class="col-md-6 column">
-                        {{#pictrues}}
+
                         <ul class="list-group  list_picture_group">
+                            {{#pictrues}}
                             <li class="list-group-item ">
                                 <a class="fancybox" href="{{path}}">查看图片</a>
                             </li>
+                            {{/pictrues}}
                         </ul>
-                        {{/pictrues}}
+
                     </div>
                 </div>
                 <div class="row clearfix" style="margin-bottom: 30px;">
