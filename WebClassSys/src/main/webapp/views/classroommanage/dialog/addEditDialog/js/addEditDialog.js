@@ -46,13 +46,12 @@ define(basePath + "/views/classroommanage/dialog/addEditDialog/js/addEditDialog"
             }
             ],
             onshown: function (dialogRef) {
-                initEvent();
-                onShowText();
+
+
             }
         };
 
         function onShowText() {
-            console.log("教师："+$("input[name='indexCode']").val());
             if ($classroomindexcode != undefined) {//教室Indexcode为空的时候为新增加
                 $classroomService.findByIndexCode($("input[name='indexCode']").val(), function (classroom) {
                     var classroomdata = classroom.data;
@@ -199,7 +198,7 @@ define(basePath + "/views/classroommanage/dialog/addEditDialog/js/addEditDialog"
             }
         }
 
-        function initEvent() {
+        function initEvents() {
             $('.fancybox').fancybox();
             $(".list_picture_group_dialog").on("click", ".btn_picture_delete", function () {
                 $(this).parent().remove();
@@ -264,6 +263,11 @@ define(basePath + "/views/classroommanage/dialog/addEditDialog/js/addEditDialog"
                 }
 
                 $addEditDialog =  BootstrapDialog.show(options);
-            }
+            },
+            initEvent:initEvent
+        }
+        function initEvent(){
+            initEvents();
+            onShowText();
         }
     });

@@ -82,4 +82,9 @@
     </div>
   </div>
 </div>
+<script>
+  seajs.use(basePath + "/views/classroommanage/dialog/addEditDialog/js/addEditDialog",function(data){
+    data.initEvent();
+  })
+</script>
 

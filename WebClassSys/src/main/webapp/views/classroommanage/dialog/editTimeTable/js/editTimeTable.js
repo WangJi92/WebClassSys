@@ -84,20 +84,7 @@ define(basePath + "/views/classroommanage/dialog/editTimeTable/js/editTimeTable"
                 }
             ],
             onshown: function (dialogRef) {
-                var template = $("#timetable_templage").html();
-                Mustache.parse(template);
-                var outputStr = Mustache.render(template,$row);
-                $(".edittimetable").append(outputStr);
-                $dicService.getDicSelectByName("DIC_CLASSSTATE", function (result) {
-                    if (result.success == true && result.data != null) {
-                        $.each(result.data, function (index, value) {
-                            if(value.value != $row.type){
-                                $("select[name='type']").append("<option value='" + value.value + "'>" + value.key + "</option>");
-                            }
 
-                        });
-                    }
-                });
             }
         };
         module.exports = {
@@ -105,7 +92,25 @@ define(basePath + "/views/classroommanage/dialog/editTimeTable/js/editTimeTable"
                 $timetalbeRef = tableRef;
                 $row = row;
                  BootstrapDialog.show(options);
-            }
+            },
+            initEvent:initEvent
+
+        }
+        function initEvent(){
+            var template = $("#timetable_templage").html();
+            Mustache.parse(template);
+            var outputStr = Mustache.render(template,$row);
+            $(".edittimetable").append(outputStr);
+            $dicService.getDicSelectByName("DIC_CLASSSTATE", function (result) {
+                if (result.success == true && result.data != null) {
+                    $.each(result.data, function (index, value) {
+                        if(value.value != $row.type){
+                            $("select[name='type']").append("<option value='" + value.value + "'>" + value.key + "</option>");
+                        }
+
+                    });
+                }
+            });
 
         }
 
