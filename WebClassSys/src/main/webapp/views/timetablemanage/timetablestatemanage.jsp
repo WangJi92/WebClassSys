@@ -29,7 +29,7 @@
 <%@ include file="./../../admin/common/left.jsp" %>
 <div class="maincontent row">
   <ul class="breadcrumb">
-    <li class="active">借用教室申请</li>
+    <li class="active">教室状态管理</li>
   </ul>
   <div class="col-sm-12">
     <div class="row">
