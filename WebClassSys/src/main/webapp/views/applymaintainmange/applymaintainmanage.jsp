@@ -30,7 +30,7 @@
 <%@ include file="./../../admin/common/left.jsp" %>
 <div class="maincontent row">
   <ul class="breadcrumb">
-    <li class="active">保修信息管理</li>
+    <li class="active">报修信息管理</li>
   </ul>
   <div class="col-sm-12">
     <form class="form-inline"  style="margin-bottom: 10px" role="form">
