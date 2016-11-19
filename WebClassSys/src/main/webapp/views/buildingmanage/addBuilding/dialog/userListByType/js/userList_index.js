@@ -46,7 +46,7 @@ define(basePath + "/views/buildingmanage/addBuilding/dialog/userListByType/js/us
             },
             // height: getHeight(),
             formatSearch: function () {
-                return "登录名手机.."
+                return "姓名手机.."
             },
             columns: [
                 {
@@ -55,7 +55,7 @@ define(basePath + "/views/buildingmanage/addBuilding/dialog/userListByType/js/us
                     align: 'center',
                     valign: 'middle'
                 }, {
-                    title: '登录名',
+                    title: '姓名',
                     field: 'userName',
                     align: 'center',
                     valign: 'middle'

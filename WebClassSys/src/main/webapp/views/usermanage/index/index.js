@@ -57,7 +57,7 @@ define(basePath + "/views/usermanage/index/index",
             },
            // height: getHeight(),
             formatSearch:function(){
-                return "登录名密码手机.."
+                return "姓名登录名密码手机.."
             },
             columns: [
                 {
