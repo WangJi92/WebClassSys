@@ -36,4 +36,14 @@ public class HttpRequestUtils {
        }
        return EMPTY_STRING;
    }
+    public  static  String  getBasePath(){
+        HttpServletRequest request = RequestResponseContext.getRequest();
+        if(request !=null){
+            String path = request.getContextPath();
+            String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
+            return basePath;
+        }
+        return EMPTY_STRING;
+
+    }
 }
