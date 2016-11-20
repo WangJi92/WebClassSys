@@ -27,14 +27,13 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.util.IOUtils;
 
 public class ExcelUtil {
     public static final String EXPORT_PIC_SUFFIX = "PicUrl";
     public static final String PIC_SUFFIX = "jpg";
 
     public static OutputStream getOutputStreamForExcelExport(
-            HttpServletResponse response, String fileType) {
+            HttpServletResponse response, String fileName) {
         if (response == null) {
             return null;
         }
@@ -48,7 +47,7 @@ public class ExcelUtil {
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH_mm_ss");
         String dateString = sdf.format(new Date());
         response.setHeader("Content-disposition", "attachment; filename=\""
-                + fileType + dateString + ".xls\"");
+                + fileName + dateString + ".xls\"");
         response.setContentType("application/msexcel");
         return os;
     }
