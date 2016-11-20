@@ -21,12 +21,12 @@ public class CookieUtils {
      * @param value
      * @param maxAge
      */
-    public  static void setCookie(HttpServletResponse response,String key,String value,int maxAge)
+    public  static void addCookie(HttpServletResponse response,String key,String value,int maxAge)
     {
-       if(StringUtils.isNotEmpty(key) && StringUtils.isNotEmpty(value)){
+       if(StringUtils.isNotEmpty(key)){
            Cookie cookie = new Cookie(key,value);
            cookie.setPath("/");
-           if(maxAge>0){
+           if(maxAge>=0){
                cookie.setMaxAge(maxAge);
            }
            response.addCookie(cookie);
