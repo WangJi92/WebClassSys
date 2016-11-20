@@ -70,9 +70,15 @@ define(basePath + "/views/dictionary/index/dictionary_index",
                     formatter: stateFormatter
                 }, {
                     title: '分类类型',
-                    field: 'classfiyType',
+                    field: 'classfiyTypeName',
                     align: 'center',
-                    valign: 'middle'
+                    valign: 'middle',
+                    formatter:function(value,row,index){
+                        if(row.fatherState == 1){
+                            return "<font color='red'>【"+row.classfiyTypeName+"】</font>"
+                        }
+                        return "【"+row.classfiyTypeName+"】"
+                    }
                 },
                 {
                     field: 'name',
@@ -140,7 +146,7 @@ define(basePath + "/views/dictionary/index/dictionary_index",
             $tableDic = $("#table").bootstrapTable(options);
 
             $(".dic_add").click(function(){
-                $dicAddAndEditDialog.openAddDialog($tableDic);
+                $dicAddAndEditDialog.openAddDialog($tableDic,null);
             });
             $(".dic_delete").click(function () {
                 var ids = getIdSelections();

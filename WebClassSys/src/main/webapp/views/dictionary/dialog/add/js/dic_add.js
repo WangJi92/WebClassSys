@@ -30,10 +30,22 @@ define(basePath + "/views/dictionary/dialog/add/js/dic_add",
                 label: "保存",
                 cssClass: 'btn-primary',
                 action: function (dialogRef) {
-                    $dicService.addOrUpdate($("#dicDialog").serialize(), function (data) {
+                    //这里是保存和新建放在一起的 类型的type上传的是select的文字，后台可以简单的处理的
+                    if($row != null){
+                        $row.name=$("input[name='name']").val();
+                        $row.value=$("input[name='value']").val();
+                        $row.classfiyType=$("*[name='classfiyType']").find("option:selected").text();
+                    }else{
+                        $row = {
+                            name: $("input[name='name']").val(),
+                            value:$("input[name='value']").val(),
+                            classfiyType:$("*[name='classfiyType']").find("option:selected").text()
+                        }
+                    }
+                    $dicService.addOrUpdate($row, function (data) {
                         if (data.success == true) {
                             var dialogTip = new BootstrapDialog({
-                                message: "添加成功",
+                                message: "操作成功",
                                 cssClass: "width200-dialog",
                                 onshow: function (diaRef) {
                                     setTimeout(function () {
@@ -92,20 +104,10 @@ define(basePath + "/views/dictionary/dialog/add/js/dic_add",
                     }
                 });
             } else {
-                $dicService.getDicTypeValue(function (dataSelect) {
-                    console.log(dataSelect);
-                    var SelectData = dataSelect.data;
-                    var selectId;//找到当前的SelectId;
-                    for (var i = 0; i < SelectData.length; i++) {
-                        if (SelectData[i].key == $row.classfiyType) {
-                            selectId = SelectData[i].value;
-                            break;
-                        }
-                    }
                     $dicService.dicFatherSelectBean(function (result) {
                         if (result.success == true && result.data != null) {
                             $.each(result.data, function (index, value) {
-                                if (value.value == selectId) {
+                                if (value.value == $row.classfiyTypeIndexValue) {
                                     $("select[name='classfiyType']").append("<option selected value='" + value.value + "'>" + value.key + "</option>");
                                 } else {
                                     $("select[name='classfiyType']").append("<option value='" + value.value + "'>" + value.key + "</option>");
@@ -116,7 +118,6 @@ define(basePath + "/views/dictionary/dialog/add/js/dic_add",
                             $("input[name='name']").attr("value", $row.name);
                         }
                     });
-                });
             }
         }
 
