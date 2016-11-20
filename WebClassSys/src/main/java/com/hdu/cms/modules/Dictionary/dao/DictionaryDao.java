@@ -67,7 +67,7 @@ public class DictionaryDao  extends HibernateEntityDao<Dictionary>{
      * @param indexcode
      */
     public void deleteByIndexcode(String indexcode){
-        super.executeUpdateSQL("delete  from Dictionary  where indexCode ='"+indexcode+"'");
+        super.executeUpdateHql("delete  from Dictionary  where indexCode ='" + indexcode + "'");
     }
 
     /**
@@ -157,6 +157,9 @@ public class DictionaryDao  extends HibernateEntityDao<Dictionary>{
     public PageBean<Dictionary> dicFindPageBean(Integer pageNo,Integer pageSize,String search){
         DetachedCriteria detachedCriteria =DetachedCriteria.forClass(Dictionary.class);
         detachedCriteria.addOrder(Order.asc("classfiyType"));
+        detachedCriteria.addOrder(Order.desc("fatherState"));
+        detachedCriteria.addOrder(Order.desc("fixed"));
+        detachedCriteria.addOrder(Order.asc("value"));
         if(StringUtils.isNotEmpty(search)){
             detachedCriteria.add(Restrictions.disjunction()
                     .add(Restrictions.like("name", "%" + search + "%"))
@@ -172,7 +175,9 @@ public class DictionaryDao  extends HibernateEntityDao<Dictionary>{
     public List<Dictionary> dicFindAll(){
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(Dictionary.class);
         detachedCriteria.addOrder(Order.asc("classfiyType"));
+        detachedCriteria.addOrder(Order.desc("fatherState"));
+        detachedCriteria.addOrder(Order.desc("fixed"));
+        detachedCriteria.addOrder(Order.asc("value"));
         return  super.findAllByCriteria(detachedCriteria);
-
     }
 }

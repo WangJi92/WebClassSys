@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by JetWang on 2016/10/10.
@@ -43,22 +44,61 @@ public class DictionaryAction  extends BaseAction{
     public ActionResult addorUpdate(Dictionary dictionary){
         ActionResult result = new ActionResult(true);
         try {
+            /**
+             * 这里修改一下子，通过select的名称 获取 教室分类*****DIC_CLASS......
+             * 这样处理的原因是，我们没有新的字段放置Int的类型 ，将就使用这个text，唯一的
+             * todo 1.根据select文本 转换为具体的类型标识
+             * todo 2.找到当前类型下的key value 的Map
+             * todo 3. 看看有没有字典的值 和 名称重复的了
+             * todo 4 保证唯一才是对的
+             */
+            dictionary.setClassfiyType(DICTIONARY.MapNameToType.get(dictionary.getClassfiyType()));
+            DICTIONARY enumDICIONARY = DICTIONARY.MapTypeToDictionary.get(dictionary.getClassfiyType());
+            Map<Integer,String> mapIntegerString = DictionaryService.mapInteger.get(enumDICIONARY);
+            Map<String,Integer> mapStringInteger =DictionaryService.mapString.get(enumDICIONARY);
             if(dictionary.getId() == null){
-                DICTIONARY dicType = DICTIONARY.getDictionaryByKey(Integer.valueOf(dictionary.getClassfiyType()));
-                dictionary.setClassfiyType(dicType.getValue());
-                dictionary.setFatherState(0);
-                dictionary.setFixed(0);
-                dictionary.setIndexCode(RandomUtil.getUUID32BIT());
-                dictionaryService.saveOrUpdateDic(dictionary);
+               if(mapIntegerString.get(dictionary.getValue()) == null && mapStringInteger.get(dictionary.getName())== null){
+                   dictionary.setFatherState(0);
+                   dictionary.setFixed(0);
+                   dictionary.setIndexCode(RandomUtil.getUUID32BIT());
+                   dictionaryService.saveOrUpdateDic(dictionary);
+               }else {
+                   result.setMessage("当前类型下已经存在相同的字典名称或者字典值");
+                   result.setSuccess(false);
+                   return  result;
+               }
             }else{
                 Dictionary old = dictionaryService.findById(dictionary.getId());
                 if(old !=null){
-                    BeanUtils.copyProperties(dictionary,old);
-                    dictionaryService.saveOrUpdateDic(old);
+                    /**
+                     * todo 成功的几种情况 1 map中无论值还是name没有存在 2 其中一个存在 但是是原来的value 或者 name  3 全都是原来的，没有变化
+                     *
+                     */
+                         if((mapIntegerString.get(dictionary.getValue()) == null
+                            && mapStringInteger.get(dictionary.getName())==null)
+
+                           ||(mapIntegerString.get(dictionary.getValue()) != null
+                            && mapStringInteger.get(dictionary.getName())==null
+                            && mapIntegerString.get(dictionary.getValue()).equals(old.getName()))
+
+                            ||(mapIntegerString.get(dictionary.getValue()) == null
+                            && mapStringInteger.get(dictionary.getName())!=null
+                            &&mapStringInteger.get(dictionary.getName()).equals(old.getValue()))
+
+                            ||(mapIntegerString.get(dictionary.getValue()) != null
+                            && mapStringInteger.get(dictionary.getName())!=null
+                            && mapIntegerString.get(dictionary.getValue()).equals(old.getName())
+                            && mapStringInteger.get(dictionary.getName()).equals(old.getValue()))
+                            ){
+                        BeanUtils.copyProperties(dictionary,old);
+                        dictionaryService.saveOrUpdateDic(old);
+                    }else{
+                        result.setMessage("当前类型下已经存在相同的字典值");
+                        result.setSuccess(false);
+                        return  result;
+                    }
                 }
-
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             LogUtils.logException(e);
@@ -119,7 +159,7 @@ public class DictionaryAction  extends BaseAction{
     public ActionResult deleteByIndexcodes(List<String> indexcodes){
         ActionResult result = new ActionResult(true);
         try {
-            dictionaryService.delteDicByIndexcodes(indexcodes);
+            dictionaryService.deleteDicByIndexcodes(indexcodes);
         } catch (Exception e) {
             e.printStackTrace();
             LogUtils.logError("删除出现异常");
@@ -219,7 +259,7 @@ public class DictionaryAction  extends BaseAction{
         ActionResult result = new ActionResult(true);
         if(StringUtils.isNotEmpty(typeName)){
             try {
-                DICTIONARY dictionary = DICTIONARY.getDictionary(typeName);
+                DICTIONARY dictionary = DICTIONARY.MapTypeToDictionary.get(typeName);
                 List<SelectBean> selectBeanList = dictionaryService.getDicSelectBaeanByType(dictionary);
                 result.setData(selectBeanList);
             } catch (Exception e) {

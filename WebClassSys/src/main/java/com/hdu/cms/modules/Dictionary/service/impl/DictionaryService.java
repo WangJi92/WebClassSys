@@ -8,9 +8,9 @@ import com.hdu.cms.common.HibernateUtilExtentions.PageBean;
 import com.hdu.cms.common.RequestResponseContext.RequestResponseContext;
 import com.hdu.cms.common.Utils.*;
 import com.hdu.cms.modules.Dictionary.dao.DictionaryDao;
+import com.hdu.cms.modules.Dictionary.dto.DictionaryDto;
 import com.hdu.cms.modules.Dictionary.entity.Dictionary;
 import com.hdu.cms.modules.Dictionary.service.IDictionary;
-import com.hdu.cms.modules.Equipment.entity.Equipment;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 import jxl.write.Label;
@@ -18,6 +18,7 @@ import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -103,10 +104,11 @@ public class DictionaryService implements IDictionary, InitializingBean {
     @Override
     public void saveOrUpdateDic(Dictionary dictionary) {
         dictionaryDao.dicSaveOrUpdate(dictionary);
-        // 根据当前数据字典的 classfyType 查找到
-        DICTIONARY item = DICTIONARY.getDictionary(dictionary.getClassfiyType());
+        // 根据当前数据字典的 classfyType 查找到 这里有buger 如果类型变化了~这里就留下问题了 所以加载所以的
+       // DICTIONARY item = DICTIONARY.MapTypeToDictionary.get(dictionary.getClassfiyType());
         //修改缓存！
-        reloadItem(item);
+       // reloadItem(item);
+        reloadAll();
     }
 
     /**
@@ -126,8 +128,7 @@ public class DictionaryService implements IDictionary, InitializingBean {
      * @param indexcodes
      */
     @Override
-    @Transactional(readOnly = false)
-    public void delteDicByIndexcodes(List<String> indexcodes) {
+    public void deleteDicByIndexcodes(List<String> indexcodes) {
         dictionaryDao.dicDeleteByIndexCode(indexcodes);
         reloadAll();
     }
@@ -163,7 +164,25 @@ public class DictionaryService implements IDictionary, InitializingBean {
      */
     @Override
     public PageBean findPageBean(Integer pageNo, Integer pageSize,String serarch) {
-        return dictionaryDao.dicFindPageBean(pageNo, pageSize,serarch);
+        PageBean oldPageBean = dictionaryDao.dicFindPageBean(pageNo, pageSize, serarch);
+        PageBean newPageBean = new PageBean();
+        if(CollectionUtils.isNotEmpty(oldPageBean.getRows())){
+            BeanUtils.copyProperties(oldPageBean,newPageBean);
+            List<Dictionary> dictionaryList = oldPageBean.getRows();
+            List<DictionaryDto>  dictionaryDtos = Lists.newArrayList();
+            for(Dictionary  Item : dictionaryList){
+                dictionaryDtos.add(entityToDto(Item));
+            }
+            newPageBean.setRows(dictionaryDtos);
+        }
+        return newPageBean;
+    }
+    private DictionaryDto entityToDto(Dictionary dictionary){
+        DictionaryDto dto = new DictionaryDto();
+        BeanUtils.copyProperties(dictionary,dto);//为了前端的展示
+        dto.setClassfiyTypeName(DICTIONARY.MapTypeToName.get(dictionary.getClassfiyType()));
+        dto.setClassfiyTypeIndexValue(DICTIONARY.MapTypeToIndex.get(dictionary.getClassfiyType()));
+        return dto;
     }
     @Override
     public List<Dictionary> findAllDic() {
@@ -223,7 +242,7 @@ public class DictionaryService implements IDictionary, InitializingBean {
                 for(Dictionary Item : dictionaryList){
                     row++;
                     col=0;
-                    sheet.addCell(new Label(col++,row,Item.getClassfiyType()));//字典分类
+                    sheet.addCell(new Label(col++,row,"【"+DICTIONARY.MapTypeToName.get(Item.getClassfiyType())+"】"));//字典分类
                     sheet.addCell(new Label(col++,row,Item.getName()));//字典名称
                     sheet.addCell(new Label(col++,row,Item.getValue().toString()));//字典值
                     sheet.addCell(new Label(col++,row,(Item.getFixed() !=null && Item.getFixed()==1)?"是":"否"));

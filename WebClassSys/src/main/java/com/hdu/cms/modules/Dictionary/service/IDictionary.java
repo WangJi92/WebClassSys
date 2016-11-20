@@ -50,7 +50,7 @@ public interface IDictionary {
      *
      * @param indexcodes
      */
-    public void delteDicByIndexcodes(List<String> indexcodes);
+    public void deleteDicByIndexcodes(List<String> indexcodes);
 
     /**
      *
