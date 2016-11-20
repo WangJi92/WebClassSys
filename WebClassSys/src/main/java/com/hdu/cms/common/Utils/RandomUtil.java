@@ -1,5 +1,7 @@
 package com.hdu.cms.common.Utils;
 
+import com.hdu.cms.common.ConstantParam.UNIQUETYPE;
+
 import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
@@ -59,20 +61,4 @@ public class RandomUtil {
 
 }
 
-enum UNIQUETYPE {
-    NUMBER(0),
-    LOWERALPHABET(1),
-    BIGALPHABET(2),
-    NUMBERANDALP(3),
-    OTHER(4);
-    private int value;
-
-    UNIQUETYPE(int value) {
-        this.value = value;
-    }
-
-    public int getValue() {
-        return this.value;
-    }
-}
 
