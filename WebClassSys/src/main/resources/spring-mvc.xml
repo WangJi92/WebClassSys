@@ -27,7 +27,7 @@
     <mvc:annotation-driven/>
 
     <mvc:default-servlet-handler/>
-    <context:component-scan base-package="com.hdu.cms"></context:component-scan>
+    <context:component-scan base-package="com.hdu.cms.modules.*.action"></context:component-scan>
 	<!-- Spring MVC JSON --> 
 	<!-- 视图解析器和json解析器 -->
    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
@@ -66,6 +66,6 @@
 	</bean>
    <!--  拦截器的配置-->
     <mvc:interceptors>
-        <bean class="com.hdu.cms.common.HandlerInterceptor.HttpServletResponseInterceptor" />
+            <bean class="com.hdu.cms.common.HandlerInterceptor.HttpServletResponseInterceptor" />
     </mvc:interceptors>
 </beans>

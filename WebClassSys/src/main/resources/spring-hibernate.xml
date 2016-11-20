@@ -9,6 +9,11 @@
 
     <context:property-placeholder location="classpath:config.properties"></context:property-placeholder>
 
+    <!--全局的Context可以随意获取bean-->
+    <bean id="globalContext" class="com.hdu.cms.common.RequestResponseContext.GlobalContext"></bean>
+    <context:component-scan base-package="com.hdu.cms.modules.*.dao"></context:component-scan>
+    <context:component-scan base-package="com.hdu.cms.modules.*.service"></context:component-scan>
+    <context:component-scan base-package="com.hdu.cms.modules.*.entity"></context:component-scan>
     <!-- DBCP -->
     <bean id="dataSource"
           class="org.apache.commons.dbcp.BasicDataSource"
@@ -41,44 +46,6 @@
         <property name="minEvictableIdleTimeMillis" value="10000"/>
         <property name="validationQuery" value="SELECT NOW() FROM DUAL"/>
     </bean>
-    <!-- TransactionManager定义。 -->
-    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-    <bean id="transactionTemplate"
-          class="org.springframework.transaction.support.TransactionTemplate">
-        <property name="transactionManager" ref="transactionManager"/>
-    </bean>
-
-    <aop:aspectj-autoproxy proxy-target-class="true"/>
-
-    <tx:advice id="txAdvice" transaction-manager="transactionManager">
-        <tx:attributes>
-            <tx:method name="add*" propagation="REQUIRED" read-only="false"
-                       rollback-for="java.lang.Exception"/>
-            <tx:method name="remoteConfig*" propagation="REQUIRED" read-only="false"
-                       rollback-for="java.lang.Exception"/>
-            <tx:method name="del*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception"/>
-            <tx:method name="modify*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception"/>
-            <tx:method name="update*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception"/>
-            <tx:method name="bund*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception"/>
-            <tx:method name="unBund*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception"/>
-            <tx:method name="save*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception"/>
-            <tx:method name="get*" propagation="SUPPORTS" read-only="true"/>
-            <tx:method name="find*" propagation="SUPPORTS" read-only="true"/>
-            <tx:method name="newSave*" propagation="REQUIRES_NEW" read-only="false" rollback-for="java.lang.Exception"/>
-            <tx:method name="noSupport*" propagation="NOT_SUPPORTED"
-                       read-only="true"/>
-            <tx:method name="*" propagation="SUPPORTS" read-only="true"/>
-        </tx:attributes>
-    </tx:advice>
-    <!--把事务控制在Service层-->
-    <aop:config>
-        <aop:pointcut id="pc"
-                      expression="(execution(public * com.hdu.cms..*.service.*.*(..)))"/>
-        <aop:advisor pointcut-ref="pc" advice-ref="txAdvice"/>
-    </aop:config>
-
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <!-- 指定映射定义-->
@@ -96,14 +63,14 @@
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.show_sql">false</prop>
                 <prop key="hibernate.format_sql">false</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="hibernate.autoReconnect">true</prop>
                 <prop key="hibernate.jdbc.batch_size">50</prop>
-                <prop key="hibernate.connection.autocommit">false</prop>
-                <prop key="hibernate.connection.release_mode">after_transaction</prop>
-                <prop key="hibernate.bytecode.use_reflection_optimizer">false</prop>
+              <prop key="hibernate.connection.autocommit">false</prop>
+              <prop key="hibernate.connection.release_mode">after_transaction</prop>
+              <prop key="hibernate.bytecode.use_reflection_optimizer">false</prop>
             </props>
         </property>
         <property name="packagesToScan">
@@ -112,6 +79,40 @@
             </list>
         </property>
     </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+    <!-- TransactionManager定义。 -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="add*" propagation="REQUIRED" read-only="false"
+                       rollback-for="java.lang.Exception"/>
+            <tx:method name="remoteConfig*" propagation="REQUIRED" read-only="false"
+                       rollback-for="java.lang.Exception"/>
+            <tx:method name="del*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception"/>
+            <tx:method name="modify*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception"/>
+            <tx:method name="update*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception"/>
+            <tx:method name="bund*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception"/>
+            <tx:method name="unBund*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception"/>
+            <tx:method name="save*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception"/>
+            <tx:method name="reload*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception"/>
+            <tx:method name="get*" propagation="SUPPORTS" read-only="true"/>
+            <tx:method name="find*" propagation="SUPPORTS" read-only="true"/>
+            <tx:method name="newSave*" propagation="REQUIRES_NEW" read-only="false" rollback-for="java.lang.Exception"/>
+            <tx:method name="noSupport*" propagation="NOT_SUPPORTED"
+                       read-only="true"/>
+            <tx:method name="*" propagation="SUPPORTS" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+    <!--把事务控制在Service层-->
+    <aop:config>
+        <aop:pointcut id="pc"
+                      expression="(execution(* com.hdu.cms..*.service..*.*(..)))"/>
+        <aop:advisor pointcut-ref="pc" advice-ref="txAdvice"/>
+    </aop:config>
+
 </beans>
 
 
