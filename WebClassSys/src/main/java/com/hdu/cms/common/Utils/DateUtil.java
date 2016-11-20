@@ -154,7 +154,7 @@ public class DateUtil {
         return convertDateTimeToString(timestamp, "yyyy-MM-dd HH:mm:ss.SSS", "");
     }
     public static String convertTimestampToStrings(Timestamp timestamp) {
-        return convertDateTimeToString(timestamp, "yyyy-MM-dd", "");
+        return convertDateTimeToString(timestamp, "yyyy-MM-dd HH:mm:ss", "");
     }
 
     /**
