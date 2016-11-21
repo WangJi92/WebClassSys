@@ -1,4 +1,4 @@
-package com.hdu.cms.modules.upload;
+package com.hdu.cms.modules.upload.action;
 
 import com.hdu.cms.common.BaseAction.BaseAction;
 import com.hdu.cms.common.ConstantParam.ConstantParam;
