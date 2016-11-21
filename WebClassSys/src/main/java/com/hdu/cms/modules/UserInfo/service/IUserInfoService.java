@@ -16,15 +16,14 @@ public interface IUserInfoService {
      * @param pageNo
      * @return
      */
-    public PageBean  findPageInfo(Integer pageSize,Integer pageNo,String serarch);
+    public PageBean  findPageInfo(Integer pageSize,Integer pageNo,String serarch,Integer userType);
 
     /**
      * 登录
-     * @param userName
      * @param passWord
      * @return
      */
-    public boolean logIn(String userName,String passWord);
+    public boolean login(String loginAccount,String passWord);
 
     /**
      * 保存用户信息 或者修改用户信息；
@@ -33,11 +32,11 @@ public interface IUserInfoService {
     public void saveOrUpdate(UserInfo userInfo);
 
     /**
-     * 通过用户名获得用户的信息
-     * @param userName
+     * 通过登录名
+     * @param loginAccount
      * @return
      */
-    public UserInfo getUserInfoByName(String userName);
+    public UserInfo getUserByLgoinAccount(String loginAccount);
 
 
     /**

@@ -15,6 +15,9 @@ public class UserInfo implements Serializable{
     @Column(name="user_name",length=32)
     private String userName;
 
+    @Column(name="user_loginAccount",length=32)
+    private String loginAccount;
+
     /**
      * 用户类型 1 admin 2 teacher 3 student
      */
@@ -54,6 +57,13 @@ public class UserInfo implements Serializable{
 
     @Column(name="user_picture",length=64)
     private String picture;
+
+    public String getLoginAccount() {
+        return loginAccount;
+    }
+    public void setLoginAccount(String loginAccount) {
+        this.loginAccount = loginAccount;
+    }
 
     public String getTell() {
         return tell;

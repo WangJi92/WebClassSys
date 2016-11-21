@@ -33,7 +33,7 @@ import java.util.Map;
  * Created by JetWang on 2016/10/6.
  * 用户信息Service类
  */
-@Service(value = "userInfoService")
+@Service
 public class UserInfoService  implements IUserInfoService{
     
     @Resource
@@ -75,13 +75,13 @@ public class UserInfoService  implements IUserInfoService{
     }
 
     @Override
-    public UserInfo getUserInfoByName(String userName) {
-        return userInfoDao.getUserByName(userName);
+    public UserInfo getUserByLgoinAccount(String userName) {
+        return userInfoDao.getUserByLgoinAccount(userName);
     }
 
     @Override
-    public boolean logIn(String userName, String passWord) {
-       UserInfo userInfo = getUserInfoByName(userName);
+    public boolean login(String loginAccount, String passWord) {
+       UserInfo userInfo = getUserByLgoinAccount(loginAccount);
         if(userInfo !=null && userInfo.getPassword().equals(passWord)){
             return true;
         }
@@ -101,8 +101,8 @@ public class UserInfoService  implements IUserInfoService{
      * @return
      */
     @Override
-    public PageBean  findPageInfo(Integer pageSize, Integer pageNo,String serach) {
-        PageBean<UserInfo>  oldPageBean =  userInfoDao.getPageUserInfo(pageSize, pageNo,serach);
+    public PageBean  findPageInfo(Integer pageSize, Integer pageNo,String serach,Integer userType) {
+        PageBean<UserInfo>  oldPageBean =  userInfoDao.getPageUserInfo(pageSize, pageNo,serach,userType);
         if(CollectionUtils.isNotEmpty(oldPageBean.getRows())){
             PageBean newPageBean = new PageBean();
             BeanUtils.copyProperties(oldPageBean,newPageBean);
@@ -111,6 +111,7 @@ public class UserInfoService  implements IUserInfoService{
             for(UserInfo Item : oldPageBean.getRows()){
                 UserInfoDto infoDto = new UserInfoDto();
                 BeanUtils.copyProperties(Item,infoDto);
+                infoDto.setIndexcode(Item.getIndexCode());//前端不能获取到这个变量信息
                 infoDto.setUserTypeStr(userTypeMap.get(Item.getUserType()));
                 userInfoDtos.add(infoDto);
             }
@@ -191,6 +192,7 @@ public class UserInfoService  implements IUserInfoService{
                     row++;
                     col=0;
                     sheet.addCell(new Label(col++,row,Item.getUserName()));
+                    sheet.addCell(new Label(col++,row,Item.getLoginAccount()));
                     sheet.addCell(new Label(col++,row,Item.getPassword()));
                     sheet.addCell(new Label(col++,row,Item.getPhone()));
                     sheet.addCell(new Label(col++,row,userTypeMap.get(Item.getUserType())));

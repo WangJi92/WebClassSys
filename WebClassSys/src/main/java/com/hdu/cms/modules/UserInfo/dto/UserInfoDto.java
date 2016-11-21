@@ -21,13 +21,23 @@ public class UserInfoDto implements Serializable {
 
     private Integer id;
 
-    private String indexCode;
+    private String indexcode;
 
     private String tell;
 
     private String phone;
 
     private String picture;
+
+    private String loginAccount;
+
+    public String getLoginAccount() {
+        return loginAccount;
+    }
+
+    public void setLoginAccount(String loginAccount) {
+        this.loginAccount = loginAccount;
+    }
 
     public String getUserName() {
         return userName;
@@ -69,12 +79,12 @@ public class UserInfoDto implements Serializable {
         this.id = id;
     }
 
-    public String getIndexCode() {
-        return indexCode;
+    public String getIndexcode() {
+        return indexcode;
     }
 
-    public void setIndexCode(String indexCode) {
-        this.indexCode = indexCode;
+    public void setIndexcode(String indexcode) {
+        this.indexcode = indexcode;
     }
 
     public String getTell() {

@@ -48,9 +48,9 @@ public class UserInfoDao extends HibernateEntityDao<UserInfo> {
      * @param userName
      * @return
      */
-    public UserInfo getUserByName(String userName) {
+    public UserInfo getUserByLgoinAccount(String userName) {
 
-        UserInfo info = super.findSingleBy("userName", userName);
+        UserInfo info = super.findSingleBy("loginAccount", userName);
         return info;
     }
 
@@ -71,12 +71,16 @@ public class UserInfoDao extends HibernateEntityDao<UserInfo> {
      * @param pageNo
      * @return
      */
-    public PageBean<UserInfo> getPageUserInfo(Integer pageSize, Integer pageNo, String search) {
+    public PageBean<UserInfo> getPageUserInfo(Integer pageSize, Integer pageNo, String search,Integer userType) {
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(UserInfo.class);
+        if(userType != null){
+            detachedCriteria.add(Restrictions.eq("userType",userType));
+        }
         detachedCriteria.addOrder(Order.asc("userType"));
         if (StringUtils.isNotEmpty(search)) {
             detachedCriteria.add(Restrictions.disjunction()
                             .add(Restrictions.like("userName", "%" + search + "%"))
+                            .add(Restrictions.like("loginAccount", "%" + search + "%"))
                             .add(Restrictions.like("phone", "%" + search + "%"))
                             .add(Restrictions.like("password", "%" + search + "%"))
 
