@@ -50,13 +50,21 @@
         <servlet-name>springMvc</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-
     <filter>
         <filter-name>SpringOpenSessionInViewFilter</filter-name>
-        <filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
+        <filter-class>com.hdu.cms.common.HibernateUtilExtentions.OpensessionInViewFliterOver</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>SpringOpenSessionInViewFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <filter>
+        <filter-name>FilterRequest</filter-name>
+        <filter-class>com.hdu.cms.common.HandlerInterceptor.FilterRequest</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>FilterRequest</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
 </web-app>
