@@ -40,10 +40,6 @@ public class EquipmentService implements IEquipmentService{
     @Resource
     private EquipmentDao equipmentDao;
 
-    /**
-     * 获取到map数据信息
-     */
-    private static Map<Integer,String> equipmentTypeMap = DictionaryService.mapInteger.get(DICTIONARY.EQUIPMENT);
 
     @Override
     public PageBean findPageInfo(Integer pageSize, Integer pageNo, String searchText) {
@@ -68,7 +64,10 @@ public class EquipmentService implements IEquipmentService{
         if(equipment != null){
             EquipmentDto dto = new EquipmentDto();
             BeanUtils.copyProperties(equipment,dto);
-            dto.setTypeStr(equipmentTypeMap.get(equipment.getType()));
+            if(equipment.getType() !=null){
+                Map<Integer,String> equipmentTypeMap = DictionaryService.mapInteger.get(DICTIONARY.EQUIPMENT);
+                dto.setTypeStr(equipmentTypeMap.get(equipment.getType()));
+            }
             return dto;
         }
         return null;
@@ -162,6 +161,7 @@ public class EquipmentService implements IEquipmentService{
     private void exportEquipment(WritableSheet sheet){
         int row =0;
         int col =0;
+        Map<Integer,String> equipmentTypeMap = DictionaryService.mapInteger.get(DICTIONARY.EQUIPMENT);
         try {
             List<Equipment> equipmentList= getAllInfo();
             if(CollectionUtils.isNotEmpty(equipmentList)){

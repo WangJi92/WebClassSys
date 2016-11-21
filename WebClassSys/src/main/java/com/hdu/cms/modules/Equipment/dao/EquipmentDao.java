@@ -23,6 +23,7 @@ public class EquipmentDao extends HibernateEntityDao<Equipment> {
     }
     public void equipDeleteById(Integer id){
         super.deleteById(id);
+        super.flush();
     }
 
     /**
@@ -43,7 +44,7 @@ public class EquipmentDao extends HibernateEntityDao<Equipment> {
         super.deleteAll("indexCode",indexcodesStr);
     }
     public void equipDeleteByIndexcode(String  indexcode){
-        super.executeUpdateSQL("delete  from Equipment  where indexCode ='" + indexcode + "'");
+        super.executeUpdateHql("delete  from Equipment  where indexCode ='" + indexcode + "'");
     }
     public Equipment equipFindBuyId(Integer id){
         return super.findById(id);
