@@ -6,9 +6,10 @@ package com.hdu.cms.common.ConstantParam;
  */
 public enum TIMETABLESTATE {
     FREE(1,"空闲"),
-    REVIEW(2,"自习室"),
-    APPLYING(4,"申请中"),
-    OCUPPLY(8,"占用");
+    APPLYING(2,"申请中"),
+    OCUPPLY(4,"占用"),
+    REVIEW(8,"自习"),
+    HAVECLASS(16,"上课");
 
     TIMETABLESTATE(Integer key, String value) {
         this.key = key;
