@@ -18,6 +18,8 @@ import com.hdu.cms.modules.Dictionary.service.impl.DictionaryService;
 import com.hdu.cms.modules.TimeTable.dto.TimeTableDto;
 import com.hdu.cms.modules.TimeTable.entity.TimeTable;
 import com.hdu.cms.modules.TimeTable.service.ITimeTableService;
+import com.hdu.cms.modules.UserInfo.entity.UserInfo;
+import com.hdu.cms.modules.UserInfo.service.IUserInfoService;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 import jxl.write.Label;
@@ -44,6 +46,9 @@ public class ApplyClassRoomService implements IApplyClassRoomService{
     private ApplyClassRoomDao applyClassRoomDao;
     @Resource
     private ITimeTableService iTimeTableService;
+
+    @Resource
+    private IUserInfoService iUserInfoService;
     @Override
     public void save(ApplyClassRoom applyClassRoom,ActionResult result) {
         if(applyClassRoom !=null && applyClassRoom.getTimetableId() !=null){
@@ -130,6 +135,11 @@ public class ApplyClassRoomService implements IApplyClassRoomService{
         TimeTableDto timeTableDto  = iTimeTableService.getDtoById(applyClassRoom.getTimetableId());
         if(timeTableDto !=null){//获取当前申请的真实的时间！
             dto.setRealLessonTime(timeTableDto.getWeekStr()+timeTableDto.getDayStr()+timeTableDto.getLessonStr());
+        }
+        if(StringUtils.isNotEmpty(applyClassRoom.getApplyIndexCode())){
+            UserInfo userInfo =iUserInfoService.getUserInfoByIndexCode(applyClassRoom.getApplyIndexCode());
+            Map<Integer,String> userTypeMap = DictionaryService.mapInteger.get(DICTIONARY.USERINFO);
+            dto.setUserType(userTypeMap.get(userInfo.getUserType()));
         }
         return  dto;
     }

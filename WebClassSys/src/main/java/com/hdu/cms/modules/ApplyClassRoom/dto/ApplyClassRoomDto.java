@@ -16,6 +16,7 @@ public class ApplyClassRoomDto implements Serializable{
     private String applyIndexCode;
     private String  applicant;
     private String phone;
+    private String userType; //用户类型
     /**
      * 用途 数据字典....上课，自习，社团活动，班级活动，比赛排练
      */
@@ -44,6 +45,14 @@ public class ApplyClassRoomDto implements Serializable{
     private String stateStr;
 
     private String  handleAddvice;
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
 
     public String getRealLessonTime() {
         return realLessonTime;

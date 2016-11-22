@@ -70,6 +70,11 @@ define(basePath + "/views/applyclassroommanage/applyclassroomindex/applyclassroo
                     formatter: applyInfoFormatter
                 },
                 {
+                    field: 'userType',
+                    title: '用户类型',
+                    align: 'center'
+                },
+                {
                     field: 'applyReason',
                     title: '申请原因',
                     align: 'center'
