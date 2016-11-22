@@ -1,6 +1,7 @@
 package com.hdu.cms.modules.TimeTable.dao;
 
 import com.google.common.collect.Lists;
+import com.hdu.cms.common.ConstantParam.UPDATEWEEKTYPE;
 import com.hdu.cms.common.HibernateUtilExtentions.HibernateEntityDao;
 import com.hdu.cms.common.HibernateUtilExtentions.PageBean;
 import com.hdu.cms.common.Utils.ArrayUtils;
@@ -175,4 +176,38 @@ public class TimeTableDao extends HibernateEntityDao<TimeTable> {
         }
         return  false;
     }
+
+    /**
+     * 批量更新课程表
+     * @param whichLesson 哪一节课
+     * @param classRoomIndexcode 教室
+     * @param whiichDay 哪一天
+     * @param beginWeek 开始周
+     * @param endWeek 结束周
+     * @param weekType 周的类型
+     * @param type 教室状态
+     */
+    public void ttBathUpate(Integer whichLesson,String classRoomIndexcode,Integer whiichDay,Integer beginWeek,Integer endWeek, Integer weekType,Integer type){
+       StringBuffer hql = new StringBuffer("update TimeTable set type ='"+type+"' where classRoomIndexCode ='" + classRoomIndexcode + "' ");
+        hql.append(" AND whiichDay='"+whiichDay+"' and whichLesson='"+whichLesson+"'");
+       if(UPDATEWEEKTYPE.SIGLEWEEK.getIndex().equals(weekType)){//单周
+           hql.append(" AND 1 =whichWeek % 2 ");
+       }else if(UPDATEWEEKTYPE.DOUBLEWEEK.getIndex().equals(weekType)){//双周
+           hql.append(" AND 0 =whichWeek % 2 ");
+       }
+        hql.append(" AND whichWeek BETWEEN '"+beginWeek+"' AND '"+endWeek+"'");
+        super.executeUpdateHql(hql.toString());
+    }
+
+    /**
+     * 批量更新教室的状态 所有的时间的当前的教室
+     * @param classRoomIndexcode 当前的状态
+     * @param type 当前的状态
+     */
+    public void ttBathUpateClassRoom(String classRoomIndexcode,Integer type){
+        StringBuffer hql = new StringBuffer("update TimeTable set type ='"+type+"' where classRoomIndexCode ='" + classRoomIndexcode + "' ");
+        super.executeUpdateHql(hql.toString());
+    }
+
+
 }

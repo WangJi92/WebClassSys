@@ -168,4 +168,14 @@ public class TimeTableService implements ITimeTableService {
     public void deleteByClassRoomIndexCode(String classRoomIndexcode) {
         timeTableDao.ttDeleteByClassRoomIndexCode(classRoomIndexcode);
     }
+
+    @Override
+    public void updateBath(Integer whichLesson, String classRoomIndexcode, Integer whiichDay, Integer beginWeek, Integer endWeek, Integer weekType, Integer type) {
+        timeTableDao.ttBathUpate(whichLesson,classRoomIndexcode,whiichDay,beginWeek,endWeek,weekType,type);
+    }
+
+    @Override
+    public void updateBacthClassRoom(String classRoomIndexcode, Integer type) {
+        timeTableDao.ttBathUpateClassRoom(classRoomIndexcode,type);
+    }
 }

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.hdu.cms.common.BaseAction.BaseAction;
 import com.hdu.cms.common.ConstantParam.ConstantParam;
 import com.hdu.cms.common.ConstantParam.LESSONDAY;
+import com.hdu.cms.common.ConstantParam.STATE;
 import com.hdu.cms.common.ConstantParam.WEEKDAY;
 import com.hdu.cms.common.HibernateUtilExtentions.PageBean;
 import com.hdu.cms.common.Utils.ActionResult;
@@ -170,6 +171,56 @@ public class TimeTableAction extends BaseAction {
             e.printStackTrace();
             result.setSuccess(false);
             result.setMessage("删除异常");
+        }
+        return  result;
+    }
+
+    /**
+     * 批量更新当前时间的当前教室的选择的周次
+     * @param classRoomIndexCode
+     * @param whiichDay
+     * @param whichLesson
+     * @param type
+     * @param batch
+     * @param beginWeek
+     * @param endWeek
+     * @param weekType
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/bathUpdate")
+    public ActionResult bathUpdate(String classRoomIndexCode,Integer whiichDay,Integer whichLesson,Integer type,Integer batch,Integer beginWeek,Integer endWeek,Integer weekType ){
+        ActionResult result = new ActionResult(true);
+        try {
+            if(StringUtils.isNotEmpty(classRoomIndexCode) &&null != whiichDay &&  null !=whichLesson && null!=type && null != batch && null!=beginWeek &&null!=endWeek && null !=weekType && beginWeek <=endWeek && batch == STATE.YES.getValue()){
+                iTimeTableService.updateBath(whichLesson, classRoomIndexCode, whiichDay, beginWeek, endWeek, weekType, type);
+            }else{
+                result.setMessage("参数错误");
+                result.setSuccess(false);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.setMessage("系统错误");
+            result.setSuccess(false);
+        }
+        return  result;
+    }
+
+    @ResponseBody
+    @RequestMapping("/bathUpdateClassRoom")
+    public ActionResult bathUpdateClassRoom(String classRoomIndexCode,Integer type,Integer batch){
+        ActionResult result = new ActionResult(true);
+        try {
+            if(StringUtils.isNotEmpty(classRoomIndexCode) &&null!=type && null != batch && 4 ==batch){
+                iTimeTableService.updateBacthClassRoom(classRoomIndexCode,type);
+            }else{
+                result.setMessage("参数错误");
+                result.setSuccess(false);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.setMessage("系统错误");
+            result.setSuccess(false);
         }
         return  result;
     }

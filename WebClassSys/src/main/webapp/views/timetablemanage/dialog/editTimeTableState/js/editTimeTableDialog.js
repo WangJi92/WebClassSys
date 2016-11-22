@@ -10,7 +10,7 @@ define(basePath + "/views/timetablemanage/dialog/editTimeTableState/js/editTimeT
 
     ],
     function (require, exports, module) {
-        var $classroomservice =require(basePath + "/views/classroommanage/service/classroomservice");
+        var $classroomservice = require(basePath + "/views/classroommanage/service/classroomservice");
         var $dictionaryService = require(basePath + "/views/dictionary/service/dictionaryService");
         module.exports = {
             initEvent: initEvent,
@@ -37,40 +37,47 @@ define(basePath + "/views/timetablemanage/dialog/editTimeTableState/js/editTimeT
                 label: "保存",
                 cssClass: 'btn-primary',
                 action: function (dialogRef) {
-                    $row.type = $("select[name='useType']").attr("value");
-                    $classroomservice.editTimeTable($row,function(data){
-                        if (data.success == true) {
-                            var dialogTip = new BootstrapDialog({
-                                message: "修改成功",
-                                cssClass: "width200-dialog",
-                                onshow: function (diaRef) {
-                                    setTimeout(function () {
-                                        diaRef.close();
-                                    }, 1500);
-                                }
-                            });
-                            dialogTip.realize();
-                            dialogTip.getModalHeader().hide();
-                            dialogTip.getModalFooter().hide();
-                            dialogTip.open();
-                            $timetablestatetable.bootstrapTable('refresh');//刷新
-                            dialogRef.close();
-                        } else {
-                            var dialogTip = new BootstrapDialog({
-                                message: data.message,
-                                cssClass: "width200-dialog",
-                                onshow: function (diaRef) {
-                                    setTimeout(function () {
-                                        diaRef.close();
-                                    }, 1500);
-                                }
-                            });
-                            dialogTip.realize();
-                            dialogTip.getModalHeader().hide();
-                            dialogTip.getModalFooter().hide();
-                            dialogTip.open();
-                        }
-                    });
+                    if(parseInt($("input[name='bath_process'][type='radio']:checked").val(),10) == 2){
+                        $row.type = $("select[name='useType']").attr("value");
+                        $classroomservice.editTimeTable($row, function (data) {
+                            if (data.success == true) {
+                                var dialogTip = new BootstrapDialog({
+                                    message: "修改成功",
+                                    cssClass: "width200-dialog",
+                                    onshow: function (diaRef) {
+                                        setTimeout(function () {
+                                            diaRef.close();
+                                        }, 1500);
+                                    }
+                                });
+                                dialogTip.realize();
+                                dialogTip.getModalHeader().hide();
+                                dialogTip.getModalFooter().hide();
+                                dialogTip.open();
+                                $timetablestatetable.bootstrapTable('refresh');//刷新
+                                dialogRef.close();
+                            } else {
+                                var dialogTip = new BootstrapDialog({
+                                    message: data.message,
+                                    cssClass: "width200-dialog",
+                                    onshow: function (diaRef) {
+                                        setTimeout(function () {
+                                            diaRef.close();
+                                        }, 1500);
+                                    }
+                                });
+                                dialogTip.realize();
+                                dialogTip.getModalHeader().hide();
+                                dialogTip.getModalFooter().hide();
+                                dialogTip.open();
+                            }
+                        });
+                    }else if(parseInt($("input[name='bath_process'][type='radio']:checked").val(),10) == 1){
+                        bathUpate(dialogRef);
+                    }else{
+                        bathUpdataClassRoom(dialogRef);
+                    }
+
                 }
             }, {
                 id: "add_cancel",
@@ -85,8 +92,135 @@ define(basePath + "/views/timetablemanage/dialog/editTimeTableState/js/editTimeT
 
             }
         };
+        function bathUpdataClassRoom(dialogRef){
+            var data = {
+                classRoomIndexCode: $row.classRoomIndexCode,
+                type: $("select[name='useType']").attr("value"),
+                batch: 4,
+            }
+            var url = basePath + "/timeTableAction/bathUpdateClassRoom";
+            var config = {
+                url: url,
+                data: data,
+                success: function(result){
+                    if(result.success ==true){
+                        var dialogTip = new BootstrapDialog({
+                            message: "操作成功",
+                            cssClass: "width200-dialog",
+                            onshow: function (diaRef) {
+                                setTimeout(function () {
+                                    diaRef.close();
+                                }, 1500);
+                            }
+                        });
+                        dialogTip.realize();
+                        dialogTip.getModalHeader().hide();
+                        dialogTip.getModalFooter().hide();
+                        dialogTip.open();
+                        $timetablestatetable.bootstrapTable('refresh');//刷新
+                        dialogRef.close();
+                    }else{
+                        var dialogTip = new BootstrapDialog({
+                            message: result.message,
+                            cssClass: "width200-dialog",
+                            onshow: function (diaRef) {
+                                setTimeout(function () {
+                                    diaRef.close();
+                                }, 1500);
+                            }
+                        });
+                        dialogTip.realize();
+                        dialogTip.getModalHeader().hide();
+                        dialogTip.getModalFooter().hide();
+                        dialogTip.open();
+                    }
+                }
+            };
+            $.ajax(config);
+        }
+        function bathUpate(dialogRef) {
+            var errormessage = null;
+            var re = /^[0-9]+.?[0-9]*$/;
+            if (!re.test($('.beginWeek_input').val()) ) {
+                errormessage = "请在开始周输入数字 ";
+            } else if (!re.test($('.endWeek_input').val())) {
+                errormessage = "请在结束周输入数字";
+            }else if(parseInt($('.beginWeek_input').val(),10)<0 || parseInt($('.endWeek_input').val(),10)<0 )
+                errormessage = "请输入开始结束周都大于0";
+            else if ( parseInt($('.beginWeek_input').val(),10) >  parseInt($('.endWeek_input').val(),10)) {
+                errormessage = "开始周不能大于结束周";
+            }
+            if (errormessage == null) {
+                var data = {
+                    classRoomIndexCode: $row.classRoomIndexCode,
+                    whiichDay: $row.whiichDay,
+                    whichLesson: $row.whichLesson,
+                    type: $("select[name='useType']").attr("value"),
+                    weekType: $("input[name='handlesetting'][type='radio']:checked").val(),
+                    batch: 1,
+                    beginWeek: $('.beginWeek_input').val(),
+                    endWeek: $('.endWeek_input').val()
+                }
+                var url = basePath + "/timeTableAction/bathUpdate";
+                var config = {
+                    url: url,
+                    data: data,
+                    success: function(result){
+                        if(result.success ==true){
+                            var dialogTip = new BootstrapDialog({
+                                message: "操作成功",
+                                cssClass: "width200-dialog",
+                                onshow: function (diaRef) {
+                                    setTimeout(function () {
+                                        diaRef.close();
+                                    }, 1500);
+                                }
+                            });
+                            dialogTip.realize();
+                            dialogTip.getModalHeader().hide();
+                            dialogTip.getModalFooter().hide();
+                            dialogTip.open();
+                            $timetablestatetable.bootstrapTable('refresh');//刷新
+                            dialogRef.close();
+                        }else{
+                            var dialogTip = new BootstrapDialog({
+                                message: result.message,
+                                cssClass: "width200-dialog",
+                                onshow: function (diaRef) {
+                                    setTimeout(function () {
+                                        diaRef.close();
+                                    }, 1500);
+                                }
+                            });
+                            dialogTip.realize();
+                            dialogTip.getModalHeader().hide();
+                            dialogTip.getModalFooter().hide();
+                            dialogTip.open();
+                        }
+                    }
+                };
+                $.ajax(config);
 
-        function initEvent(){
+            } else {
+                var dialogTip = new BootstrapDialog({
+                    message: errormessage,
+                    cssClass: "width200-dialog",
+                    onshow: function (diaRef) {
+                        setTimeout(function () {
+                            diaRef.close();
+                        }, 1500);
+                    }
+                });
+                dialogTip.realize();
+                dialogTip.getModalHeader().hide();
+                dialogTip.getModalFooter().hide();
+                dialogTip.open();
+            }
+
+
+        }
+
+        function initEvent() {
             $dictionaryService.getDicSelectByName("DIC_CLASSSTATE", function (result) {
                 if (result.success == true && result.data != null) {
                     $.each(result.data, function (index, value) {
@@ -94,14 +228,16 @@ define(basePath + "/views/timetablemanage/dialog/editTimeTableState/js/editTimeT
                     });
                 }
             });
-            $("input[name='whichLesson']").attr("value","【"+$row.weekStr+" "+$row.dayStr+" "+$row.lessonStr+"】").attr("disabled", true);
+            $("input[name='whichLesson']").attr("value", "【" + $row.weekStr + " " + $row.dayStr + " " + $row.lessonStr + "】").attr("disabled", true);
             $("*[name='useType']").find("option[value='" + $row.type + "']").attr("selected", true);
-            $("input[name='classRoomNameEdit']").attr("value",$row.classRoomName).attr("disabled", true);;
+            $("input[name='classRoomNameEdit']").attr("value", $row.classRoomName).attr("disabled", true);
+            ;
         }
 
-        function openDialog(row,applyclassroomtable) {
+        function openDialog(row, applyclassroomtable) {
             $row = row;
-            $timetablestatetable =applyclassroomtable;
+            console.log($row);
+            $timetablestatetable = applyclassroomtable;
             BootstrapDialog.show(optionsDialog);
         }
     });
