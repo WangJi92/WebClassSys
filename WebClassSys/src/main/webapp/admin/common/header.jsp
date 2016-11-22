@@ -10,7 +10,7 @@
 <link href="<%=baseUrl%>/css/default.css" rel="stylesheet" type="text/css"/>
 <!--页面加载进度条-->
 <link href="<%=baseUrl%>/libs/pace-1.1/dataurl.css" rel="stylesheet" type="text/css">
-<script type="text/javascript" src="<%=baseUrl%>/libs/pace-1.1/pace.js"></script>
+<script type="text/javascript" data-pace-options='{ "ajax": false }'  src="<%=baseUrl%>/libs/pace-1.1/pace.js"></script>
 <!--页面加载进度条-->
 <%--让页面返回顶部时平滑滚动--%>
 <script src="<%=baseUrl%>/libs/jquery.scrolltopcontrol/scrolltopcontrol.js" type="text/javascript"></script>
