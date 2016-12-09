@@ -33,7 +33,7 @@ public class FilterRequest implements Filter {
         String uri = request.getRequestURI();
         if(!uri.endsWith("jsp")){//非jsp文件
             chain.doFilter(req, resp);
-        }else if(uri.indexOf("cms/views/login")>-1){//登录不进行拦截
+        }else if(uri.indexOf("/views/login")>-1){//登录不进行拦截
             chain.doFilter(req, resp);
         }else{//其他的东西 jsp
             AuthorizedInterceptor(request,response,chain,uri);
