@@ -153,7 +153,7 @@ define(basePath + "/views/classroommanage/dialog/addEditDialog/js/addEditDialog"
                     type: $("*[name='type']").prop("value"),
                     buildingIndexCode: $(".buildingIndexcode").val()
                 }
-                if ($("input[name='id']").val() != "" ||  $("input[name='indexcode']").val() != "") {
+                if ($classroomindexcode != undefined) {//保存的时候
                     data.id = $("input[name='id']").val();
                     data.indexCode = $("input[name='indexcode']").val();
                 }

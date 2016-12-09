@@ -22,9 +22,6 @@
   <div class="row clearfix">
     <div class="col-md-6 column">
       <form class="form-horizontal" role="form">
-        <input type="hidden" name="id" >
-        <input type="hidden" name="indexcode">
-        <input type="hidden" name="buildingIndexCode">
         <div class="form-group">
           <label for="name" class="col-sm-4 control-label"><font color="red">*</font>教室名称</label>
 
